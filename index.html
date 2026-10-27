@@ -17,7 +17,7 @@
 (()=>{
 const $=id=>document.getElementById(id);
 // Google Sheets tracking: replace this URL if you deploy a different Apps Script web app.
-const GOOGLE_SCRIPT_URL="https://script.google.com/a/macros/moe-dl.edu.my/s/AKfycbwS5MLqDqDYJNGWJPMUhJCPYXZsDsuga_i3h-OXDNW_sT1lMtbEpoo-C4Yz9eUU36nmUw/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKV1bDYURkQfDnqb7QjPGfDvMeKrsJkUhhEtbE0lMYAt1qSE48nXw7UDf_7kg5vX4rqg/exec";
 let playerName='Explorer',playerClass='',score=0,gems=0,answered=0,correct=0,finished=false,running=false,paused=false,quizOpen=false;
 function saveToSheets(activity,status){
  const data=new URLSearchParams({name:playerName,studentClass:playerClass,activity,score:String(score),correctAnswers:String(correct),questionsCompleted:String(answered),gems:String(gems),status});
