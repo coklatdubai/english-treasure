@@ -1,261 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>English Treasure Quest</title>
 <style>
-:root{--ink:#20334a;--green:#2f875e;--gold:#ffd166;--cream:#fff9e9;--blue:#83d4ed}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:#9edcf0}
-#game{position:fixed;inset:0}canvas{display:block}
-.panel{background:rgba(255,249,233,.96);border:3px solid #fff;box-shadow:0 10px 30px #1d3b4d30;border-radius:22px;padding:24px}
-.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(#143d5230,#143d5260);z-index:5}
-.hidden{display:none!important}
-#startPanel{width:min(520px,96vw);text-align:center}
-.logo{font-weight:1000;font-size:clamp(2rem,6vw,3.6rem);line-height:.95;letter-spacing:-2px;color:#23744e;text-shadow:2px 3px #d6ed9c;margin:8px 0 14px}
-.subtitle{font-weight:700;color:#496273;margin:0 auto 20px;max-width:380px}
-input{width:100%;padding:13px 14px;border:2px solid #c6d9d0;border-radius:12px;margin:5px 0 10px;font:inherit;background:#fff}
-button{border:0;border-radius:13px;padding:12px 18px;background:var(--green);color:white;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 4px 0 #1c6242;transition:transform .1s}
-button:hover{filter:brightness(1.07);transform:translateY(-1px)}button:active{transform:translateY(2px);box-shadow:0 2px 0 #1c6242}
-button.secondary{background:#527c91;box-shadow:0 4px 0 #345568}button.gold{background:#e7a928;box-shadow:0 4px 0 #aa7412;color:#33270c}
-#hud{position:fixed;inset:0;pointer-events:none;z-index:2;color:#fff;text-shadow:0 2px 4px #1d3446}
-.hudtop{display:flex;justify-content:space-between;gap:10px;padding:16px;align-items:flex-start}
-.badge{background:#1f4e45dc;border:2px solid #ffffffa8;border-radius:14px;padding:10px 14px;font-weight:900;backdrop-filter:blur(5px)}
-#objective{position:absolute;top:88px;left:50%;transform:translateX(-50%);background:#fff9e9ee;color:#24435a;text-shadow:none;border-radius:14px;padding:10px 16px;font-weight:800;text-align:center;width:max-content;max-width:90vw}
-#hint{position:absolute;bottom:16px;left:16px;background:#173d4dcc;padding:12px 14px;border-radius:14px;line-height:1.6;font-size:.88rem}
-#toast{position:absolute;top:155px;left:50%;transform:translateX(-50%);padding:10px 16px;border-radius:12px;background:#183d4ddd;font-weight:900;opacity:0;transition:opacity .2s;text-align:center;max-width:90vw}
-#centerDot{position:absolute;left:50%;top:50%;width:10px;height:10px;transform:translate(-50%,-50%);border:2px solid white;border-radius:50%;box-shadow:0 1px 5px #000}
-#quizPanel,#pausePanel,#endPanel{width:min(570px,96vw);text-align:center}
-.eyebrow{font-weight:900;text-transform:uppercase;letter-spacing:1.8px;font-size:.78rem;color:#63816e}
-#question{font-size:clamp(1.25rem,3.8vw,2rem);font-weight:950;line-height:1.2;margin:12px 0}
-#questionPicture{font-size:4rem;margin:8px 0}
-#answers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
-#answers button{background:#e8f4e9;color:#24435a;box-shadow:0 4px 0 #c3d9c7;border:2px solid #fff;font-size:1rem}
-#answers button:hover{background:#d1ebd8}
-#feedback{font-weight:900;min-height:28px;margin:6px 0}
-.small{font-size:.86rem;color:#536c78;line-height:1.5}
-#endStats{font-size:1.05rem;font-weight:800;line-height:1.9;margin:15px}
-@media(max-width:520px){.panel{padding:18px}#hint{font-size:.75rem;padding:8px 10px}.hudtop{padding:9px}.badge{padding:8px;font-size:.85rem}#objective{top:73px;font-size:.85rem}#answers{grid-template-columns:1fr}}
-</style>
-</head>
-<body>
+:root{--ink:#20334a;--green:#2f875e;--gold:#ffd166;--cream:#fff9e9}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:system-ui,Arial,sans-serif;color:var(--ink);background:#9edcf0}#game{position:fixed;inset:0}canvas{display:block}.panel{background:rgba(255,249,233,.97);border:3px solid white;box-shadow:0 10px 30px #1d3b4d30;border-radius:22px;padding:24px}.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(#143d5230,#143d5260);z-index:5}.hidden{display:none!important}#startPanel,#quizPanel,#pausePanel,#endPanel{width:min(570px,96vw);text-align:center}.logo{font-weight:1000;font-size:clamp(2rem,6vw,3.3rem);line-height:.95;color:#23744e;margin:8px 0 14px}.subtitle{font-weight:700;color:#496273;margin:0 auto 20px;max-width:400px}input{width:100%;padding:13px 14px;border:2px solid #c6d9d0;border-radius:12px;margin:5px 0 10px;font:inherit}button{border:0;border-radius:13px;padding:12px 18px;background:var(--green);color:white;font-weight:800;font-size:1rem;cursor:pointer;margin:3px}button.secondary{background:#527c91}button.gold{background:#e7a928;color:#33270c}#hud{position:fixed;inset:0;pointer-events:none;z-index:2;color:white;text-shadow:0 2px 4px #1d3446}.hudtop{display:flex;justify-content:space-between;gap:10px;padding:16px}.badge{background:#1f4e45dc;border:2px solid #ffffffa8;border-radius:14px;padding:10px 14px;font-weight:900}#objective{position:absolute;top:85px;left:50%;transform:translateX(-50%);background:#fff9e9ee;color:#24435a;text-shadow:none;border-radius:14px;padding:10px 16px;font-weight:800;text-align:center;max-width:90vw}#hint{position:absolute;bottom:16px;left:16px;background:#173d4dcc;padding:12px 14px;border-radius:14px;line-height:1.6;font-size:.88rem}#question{font-size:clamp(1.25rem,3.8vw,2rem);font-weight:950;line-height:1.2;margin:12px 0}#questionPicture{font-size:3rem}#answers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}#answers button{background:#e8f4e9;color:#24435a;border:2px solid white}#feedback{font-weight:900;min-height:28px}.small{font-size:.86rem;color:#536c78;line-height:1.5}#endStats{font-size:1.05rem;font-weight:800;line-height:1.9;margin:15px}@media(max-width:520px){.panel{padding:18px}.hudtop{padding:8px}.badge{padding:7px;font-size:.8rem}#hint{font-size:.72rem}#answers{grid-template-columns:1fr}}
+</style></head><body>
 <div id="game"></div>
-<div id="hud" class="hidden">
- <div class="hudtop">
-  <div class="badge">💎 Gems: <span id="gems">0</span></div>
-  <div class="badge">🧭 Quest: <span id="progress">0</span>/5</div>
-  <div class="badge">⭐ Score: <span id="score">0</span></div>
- </div>
- <div id="objective">Explore the forest and mine 5 treasure rocks!</div>
- <div id="centerDot"></div>
- <div id="hint"><b>KEYBOARD GUIDE</b><br>W A S D — Move<br>Mouse — Look around<br>SPACE — Jump<br>Click / E — Mine nearby rock<br>SHIFT — Sprint · ESC — Pause</div>
- <div id="toast"></div>
-</div>
-<div class="overlay" id="startScreen">
- <div class="panel" id="startPanel">
-  <div style="font-size:3rem">🌿 💎 🧭</div>
-  <div class="logo">ENGLISH<br>TREASURE QUEST</div>
-  <p class="subtitle">Explore a colourful 3D world, answer English questions, and unlock the hidden treasure!</p>
-  <label for="playerName"><b>Explorer name</b></label><input id="playerName" maxlength="24" placeholder="Enter your name">
-  <label for="playerClass"><b>Class</b></label><input id="playerClass" maxlength="24" placeholder="e.g. Year 4 Bestari">
-  <p class="small">Best on a computer. Click START, then click the game to control the camera. Internet is needed to load the 3D engine.</p>
-  <button id="startBtn" style="width:100%;font-size:1.15rem;padding:15px">▶ START ADVENTURE</button>
- </div>
-</div>
-<div class="overlay hidden" id="quizScreen">
- <div class="panel" id="quizPanel">
-  <div class="eyebrow">⛏️ Mining challenge</div><div id="questionPicture"></div>
-  <div id="question">Choose the correct answer.</div>
-  <div id="answers"></div><div id="feedback" aria-live="polite"></div>
-  <div class="small" id="quizNote">Answer correctly to break the rock and discover treasure.</div>
- </div>
-</div>
-<div class="overlay hidden" id="pauseScreen">
- <div class="panel" id="pausePanel"><div style="font-size:3rem">⏸️</div><h1>Adventure paused</h1><p class="small">Take a breath, explorer!</p><button id="resumeBtn">▶ Resume</button> <button class="secondary" id="restartBtn">↻ Restart</button></div>
-</div>
-<div class="overlay hidden" id="endScreen">
- <div class="panel" id="endPanel"><div style="font-size:4rem">🏆</div><div class="logo" style="font-size:2.5rem">TREASURE FOUND!</div><p id="endGreeting"></p><div id="endStats"></div><p class="small">Great work! Keep practising your English vocabulary.</p><button id="playAgainBtn">↻ Play Again</button></div>
-</div>
+<div id="hud" class="hidden"><div class="hudtop"><div class="badge">💎 Gems: <span id="gems">0</span></div><div class="badge">🧭 Quest: <span id="progress">0</span>/5</div><div class="badge">⭐ Score: <span id="score">0</span></div></div><div id="objective">Explore the forest and mine 5 treasure rocks!</div><div id="hint"><b>CONTROLS</b><br>W A S D / Arrow keys — Move<br>Mouse — Look around<br>Click / E — Mine nearby rock<br>ESC — Pause</div></div>
+<div class="overlay" id="startScreen"><div class="panel" id="startPanel"><div style="font-size:3rem">🌿 💎 🧭</div><div class="logo">ENGLISH<br>TREASURE QUEST</div><p class="subtitle">Explore a colourful 3D world, answer English questions, and unlock the hidden treasure!</p><label for="playerName"><b>Explorer name</b></label><input id="playerName" maxlength="24" placeholder="Enter your name"><label for="playerClass"><b>Class</b></label><input id="playerClass" maxlength="24" placeholder="e.g. Year 4 Bestari"><p class="small">Best on a computer. Internet is needed to load the 3D engine.</p><button id="startBtn" style="width:100%;font-size:1.15rem;padding:15px">▶ START ADVENTURE</button></div></div>
+<div class="overlay hidden" id="quizScreen"><div class="panel" id="quizPanel"><div style="font-weight:900;color:#63816e">⛏️ MINING CHALLENGE</div><div id="questionPicture"></div><div id="question">Choose the correct answer.</div><div id="answers"></div><div id="feedback" aria-live="polite"></div><div id="quizNote" class="small">Answer correctly to break the rock and discover treasure.</div></div></div>
+<div class="overlay hidden" id="pauseScreen"><div class="panel" id="pausePanel"><h1>Adventure paused</h1><button id="resumeBtn">▶ Resume</button><button class="secondary" id="restartBtn">↻ Restart</button></div></div>
+<div class="overlay hidden" id="endScreen"><div class="panel" id="endPanel"><div style="font-size:4rem">🏆</div><div class="logo" style="font-size:2.5rem">TREASURE FOUND!</div><p id="endGreeting"></p><div id="endStats"></div><p class="small">Great work! Keep practising your English vocabulary.</p><button id="playAgainBtn">↻ Play Again</button></div></div>
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script>
-(() => {
+(()=>{
 const $=id=>document.getElementById(id);
-const gameEl=$('game');
-let scene,camera,renderer,clock,player,playerParts,terrain=[],rocks=[],decor=[],keys={},running=false,paused=false,quizOpen=false,finished=false;
-let yaw=0,pitch=.18,verticalVelocity=0,onGround=true,score=0,gems=0,answered=0,correct=0,playerName='Explorer',playerClass='',lastTime=0,toastTimer;
-const TOTAL=5, WORLD=90;
+// Google Sheets tracking: replace this URL if you deploy a different Apps Script web app.
+const GOOGLE_SCRIPT_URL="https://script.google.com/a/macros/moe-dl.edu.my/s/AKfycbwS5MLqDqDYJNGWJPMUhJCPYXZsDsuga_i3h-OXDNW_sT1lMtbEpoo-C4Yz9eUU36nmUw/exec";
+let playerName='Explorer',playerClass='',score=0,gems=0,answered=0,correct=0,finished=false,running=false,paused=false,quizOpen=false;
+function saveToSheets(activity,status){
+ const data=new URLSearchParams({name:playerName,studentClass:playerClass,activity,score:String(score),correctAnswers:String(correct),questionsCompleted:String(answered),gems:String(gems),status});
+ return fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',body:data}).catch(err=>console.error('Could not submit game record:',err));
+}
+let scene,camera,renderer,clock,player,rocks=[],keys={},yaw=0,questionQueue=[],currentRock=null;
+const TOTAL=5;
 const questions=[
- {pic:'🐇',q:'Which word names this animal?',a:['Rabbit','Shark','Spider','Snail'],correct:'Rabbit',kind:'Vocabulary'},
- {pic:'🐬',q:'Which animal lives in the sea and can leap out of the water?',a:['Panda','Dolphin','Rabbit','Snake'],correct:'Dolphin',kind:'Vocabulary'},
- {pic:'🐼',q:'Choose the correct spelling.',a:['Panda','Penda','Pandae','Pendae'],correct:'Panda',kind:'Spelling'},
- {pic:'📚',q:'Where can you borrow books to read?',a:['Library','Kitchen','Garden','Bathroom'],correct:'Library',kind:'School words'},
- {pic:'🦈',q:'Which animal has sharp teeth and lives in the sea?',a:['Snail','Rabbit','Shark','Panda'],correct:'Shark',kind:'Vocabulary'},
- {pic:'🕷️',q:'Which animal has eight legs?',a:['Fish','Spider','Dolphin','Snake'],correct:'Spider',kind:'Vocabulary'},
- {pic:'🎨',q:'Which word means “not noisy”?',a:['Loud','Boring','Quiet','Huge'],correct:'Quiet',kind:'Meaning'},
- {pic:'🐌',q:'Which animal moves very slowly?',a:['Snail','Shark','Dolphin','Spider'],correct:'Snail',kind:'Vocabulary'},
- {pic:'✏️',q:'What do pupils do at home after a lesson?',a:['Homework','Holiday','Library','Teacher'],correct:'Homework',kind:'School words'},
- {pic:'🐍',q:'Choose the correct spelling.',a:['Snake','Snaek','Snak','Sneik'],correct:'Snake',kind:'Spelling'},
- {pic:'🌟',q:'Which word means “very big”?',a:['Thin','Huge','Dry','Quiet'],correct:'Huge',kind:'Meaning'},
- {pic:'🐟',q:'Which animal usually has fins and gills?',a:['Fish','Panda','Rabbit','Spider'],correct:'Fish',kind:'Vocabulary'}
+ {pic:'🐇',q:'Which word names this animal?',a:['Rabbit','Shark','Spider','Snail'],correct:'Rabbit'},
+ {pic:'🐬',q:'Which animal lives in the sea and can leap out of the water?',a:['Panda','Dolphin','Rabbit','Snake'],correct:'Dolphin'},
+ {pic:'🐼',q:'Choose the correct spelling.',a:['Panda','Penda','Pandae','Pendae'],correct:'Panda'},
+ {pic:'📚',q:'Where can you borrow books to read?',a:['Library','Kitchen','Garden','Bathroom'],correct:'Library'},
+ {pic:'🦈',q:'Which animal has sharp teeth and lives in the sea?',a:['Snail','Rabbit','Shark','Panda'],correct:'Shark'},
+ {pic:'🕷️',q:'Which animal has eight legs?',a:['Fish','Spider','Dolphin','Snake'],correct:'Spider'},
+ {pic:'🎨',q:'Which word means “not noisy”?',a:['Loud','Boring','Quiet','Huge'],correct:'Quiet'},
+ {pic:'🐌',q:'Which animal moves very slowly?',a:['Snail','Shark','Dolphin','Spider'],correct:'Snail'},
+ {pic:'✏️',q:'What do pupils do at home after a lesson?',a:['Homework','Holiday','Library','Teacher'],correct:'Homework'},
+ {pic:'🐍',q:'Choose the correct spelling.',a:['Snake','Snaek','Snak','Sneik'],correct:'Snake'},
+ {pic:'🌟',q:'Which word means “very big”?',a:['Thin','Huge','Dry','Quiet'],correct:'Huge'},
+ {pic:'🐟',q:'Which animal usually has fins and gills?',a:['Fish','Panda','Rabbit','Spider'],correct:'Fish'}
 ];
-let questionQueue=[];
-function init3D(){
- scene=new THREE.Scene();scene.background=new THREE.Color(0x9edcf0);scene.fog=new THREE.Fog(0x9edcf0,42,115);
- camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,250);
- renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;gameEl.appendChild(renderer.domElement);
- clock=new THREE.Clock();
- scene.add(new THREE.HemisphereLight(0xe7f9ff,0x55734c,2.0));
- const sun=new THREE.DirectionalLight(0xfff3d1,2.3);sun.position.set(-25,45,20);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-60;sun.shadow.camera.right=60;sun.shadow.camera.top=60;sun.shadow.camera.bottom=-60;scene.add(sun);
- makeWorld();makePlayer();onResize();animate();
-}
-function mat(color,roughness=1){return new THREE.MeshStandardMaterial({color,roughness})}
-function box(w,h,d,material,x,y,z,cast=true){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);m.position.set(x,y,z);m.castShadow=cast;m.receiveShadow=true;scene.add(m);return m}
-function makeWorld(){
- const ground= new THREE.Mesh(new THREE.PlaneGeometry(WORLD,WORLD),mat(0x73bd68));ground.rotation.x=-Math.PI/2;ground.position.y=-.08;ground.receiveShadow=true;scene.add(ground);
- // Rolling low-poly hills around the edge
- for(let i=0;i<22;i++){let a=i/22*Math.PI*2,r=37+(i%3)*4;const h=5+(i%4)*1.7;const hill=new THREE.Mesh(new THREE.ConeGeometry(8+(i%3),h,5),mat([0x66ae6b,0x83c979,0x77b7a0][i%3]));hill.position.set(Math.cos(a)*r,h/2-1,Math.sin(a)*r);hill.rotation.y=a;hill.receiveShadow=true;scene.add(hill)}
- // distant mountains
- for(let i=0;i<11;i++){const a=i/11*Math.PI*2,r=58;const m=new THREE.Mesh(new THREE.ConeGeometry(8+i%3,13+i%5*2,5),mat(0x7eafad));m.position.set(Math.cos(a)*r,4,Math.sin(a)*r);scene.add(m)}
- // path from spawn to cave
- const path=new THREE.Mesh(new THREE.PlaneGeometry(8,48),mat(0xd8c18b));path.rotation.x=-Math.PI/2;path.position.set(0,.005,-17);scene.add(path);
- // pond
- const water=new THREE.Mesh(new THREE.CircleGeometry(6,9),new THREE.MeshStandardMaterial({color:0x54c6dd,roughness:.25,metalness:.1}));water.rotation.x=-Math.PI/2;water.position.set(21,.04,8);scene.add(water);
- // trees, shrubs, flowers
- for(let i=0;i<44;i++){let x=(Math.random()-.5)*78,z=(Math.random()-.5)*78;if(Math.hypot(x,z)<12|| (x>12&&x<30&&z>-1&&z<17))continue;makeTree(x,z,.75+Math.random()*.6)}
- for(let i=0;i<48;i++){let x=(Math.random()-.5)*70,z=(Math.random()-.5)*70;if(Math.hypot(x,z)<8)continue;const c=[0xffd166,0xf28f9b,0xffffff,0xb69cff][i%4];const f=new THREE.Mesh(new THREE.SphereGeometry(.16,5,4),mat(c));f.position.set(x,.28,z);f.scale.y=1.2;scene.add(f);decor.push(f)}
- // cave entrance at far end, framed by stone
- const caveMat=mat(0x66727a),dark=mat(0x263642);
- const cliff= new THREE.Mesh(new THREE.ConeGeometry(9,12,5),mat(0x7c918b));cliff.position.set(0,5,-39);cliff.rotation.y=.4;scene.add(cliff);
- box(5,5,1.5,caveMat,0,2,-34);
- const arch=new THREE.Mesh(new THREE.TorusGeometry(2.3,.65,5,9,Math.PI),mat(0x879b92));arch.position.set(0,2.1,-33.1);scene.add(arch);
- const caveHole=new THREE.Mesh(new THREE.CircleGeometry(2.1,8),dark);caveHole.position.set(0,2,-33.15);scene.add(caveHole);
- // colorful crystals marking the final chest
- for(let i=0;i<5;i++){const c=new THREE.Mesh(new THREE.OctahedronGeometry(.7+i%2*.25),mat([0x6ee7df,0xa7a0ff,0xffd166][i%3]));c.position.set(-3+i*1.5,.7+(i%2)*.6,-31);c.rotation.set(.2*i,.4*i,.1);scene.add(c)}
- // mining rocks placed in reachable areas
- const spots=[[-5, -7],[5,-12],[-8,-19],[8,-23],[0,-28],[13,-12],[-14,-15]];
- spots.forEach((p,i)=>makeRock(p[0],p[1],i));
- // chest beyond cave
- makeChest(0,-36);
- // small sign
- const sign=box(2.8,1.2,.18,mat(0x9b7045),-4,1.1,-5);sign.rotation.y=-.12;
- const board=box(2.5,.9,.08,mat(0xffe6a5),-4,1.25,-4.88,false);
-}
-function makeTree(x,z,s=1){
- const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.28*s,.42*s,2.2*s,5),mat(0x93613d));trunk.position.set(x,1.1*s,z);trunk.castShadow=true;scene.add(trunk);
- const greens=[0x3f9661,0x56a96b,0x79bd72,0x378b67];
- for(let j=0;j<3;j++){const crown=new THREE.Mesh(new THREE.ConeGeometry((1.6-j*.25)*s,2.1*s,6),mat(greens[Math.floor(Math.random()*greens.length)]));crown.position.set(x,(2.2+j*.85)*s,z);crown.rotation.y=j*.7;crown.castShadow=true;crown.receiveShadow=true;scene.add(crown)}
-}
-function makeRock(x,z,i){
- const group=new THREE.Group();group.position.set(x,.65,z);group.userData={rock:true,index:i,alive:true};
- const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.9,0),mat([0x87979a,0x8e9da5,0x7d8d95][i%3]));rock.scale.set(1.1,.9,.9);rock.castShadow=true;rock.receiveShadow=true;group.add(rock);
- const crystal=new THREE.Mesh(new THREE.OctahedronGeometry(.24),mat([0x66e0ce,0xffd166,0xa9a0ff][i%3]));crystal.position.set(.15,.7,.1);crystal.visible=false;group.add(crystal);group.userData.crystal=crystal;
- scene.add(group);rocks.push(group);
-}
-function makeChest(x,z){
- const g=new THREE.Group();g.position.set(x,.2,z);
- const base=new THREE.Mesh(new THREE.BoxGeometry(2,1.1,1.25),mat(0x9b5c30));base.position.y=.55;base.castShadow=true;g.add(base);
- const lid=new THREE.Mesh(new THREE.BoxGeometry(2.05,.48,1.3),mat(0xd58b3c));lid.position.y=1.32;lid.castShadow=true;g.add(lid);
- const band=new THREE.Mesh(new THREE.BoxGeometry(.25,1.45,1.36),mat(0xffd166));band.position.set(0,.8,0);g.add(band);
- const lock=new THREE.Mesh(new THREE.BoxGeometry(.35,.4,.12),mat(0xffe9a0));lock.position.set(0,.85,.7);g.add(lock);
- scene.add(g);g.userData.chest=true;decor.push(g);return g;
-}
-function makePlayer(){
- player=new THREE.Group();player.position.set(0,0,4);scene.add(player);playerParts=new THREE.Group();player.add(playerParts);
- const skin=mat(0xffc59d),shirt=mat(0x347fb0),pants=mat(0x34506c),boots=mat(0x593f35),hair=mat(0x553b2d),bag=mat(0xe6a642);
- const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.42,.55,4,8),shirt);torso.position.y=1.35;torso.castShadow=true;playerParts.add(torso);
- const head=new THREE.Mesh(new THREE.SphereGeometry(.34,10,8),skin);head.position.y=2.12;head.castShadow=true;playerParts.add(head);
- const haircap=new THREE.Mesh(new THREE.SphereGeometry(.35,8,6,0,Math.PI*2,0,Math.PI*.55),hair);haircap.position.set(0,2.23,0);playerParts.add(haircap);
- const eyeMat=mat(0x263b45);for(const x of [-.13,.13]){const eye=new THREE.Mesh(new THREE.SphereGeometry(.035,6,5),eyeMat);eye.position.set(x,2.13,.3);playerParts.add(eye)}
- const backpack=new THREE.Mesh(new THREE.BoxGeometry(.5,.6,.25),bag);backpack.position.set(0,1.38,-.48);playerParts.add(backpack);
- const armGeo=new THREE.CapsuleGeometry(.13,.48,3,6),legGeo=new THREE.CapsuleGeometry(.16,.45,3,6);
- player.userData.limbs=[];
- for(const side of [-1,1]){const arm=new THREE.Mesh(armGeo,skin);arm.position.set(side*.52,1.37,0);playerParts.add(arm);const leg=new THREE.Mesh(legGeo,pants);leg.position.set(side*.23,.53,0);playerParts.add(leg);const boot=new THREE.Mesh(new THREE.BoxGeometry(.32,.18,.42),boots);boot.position.set(side*.23,.17,.07);playerParts.add(boot);player.userData.limbs.push({arm,leg,side})}
- // pickaxe on one side
- const handle=new THREE.Mesh(new THREE.CylinderGeometry(.045,.06,.95,6),mat(0x86552f));handle.rotation.z=-.5;handle.position.set(.68,1.15,.15);playerParts.add(handle);
- const pick=new THREE.Mesh(new THREE.BoxGeometry(.65,.13,.18),mat(0xb9c8d0));pick.position.set(.9,1.52,.15);pick.rotation.z=-.2;playerParts.add(pick);
-}
+const mat=c=>new THREE.MeshStandardMaterial({color:c,roughness:1});
+function box(w,h,d,m,x,y,z){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;scene.add(o);return o}
+function init3D(){scene=new THREE.Scene();scene.background=new THREE.Color(0x9edcf0);scene.fog=new THREE.Fog(0x9edcf0,42,115);camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,250);renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.outputColorSpace=THREE.SRGBColorSpace;$('game').appendChild(renderer.domElement);clock=new THREE.Clock();scene.add(new THREE.HemisphereLight(0xe7f9ff,0x55734c,2));const sun=new THREE.DirectionalLight(0xfff3d1,2.2);sun.position.set(-25,45,20);scene.add(sun);
+ const ground=new THREE.Mesh(new THREE.PlaneGeometry(90,90),mat(0x73bd68));ground.rotation.x=-Math.PI/2;ground.position.y=-.08;scene.add(ground);const path=new THREE.Mesh(new THREE.PlaneGeometry(8,48),mat(0xd8c18b));path.rotation.x=-Math.PI/2;path.position.set(0,.005,-17);scene.add(path);
+ for(let i=0;i<36;i++){const x=(Math.random()-.5)*76,z=(Math.random()-.5)*76;if(Math.hypot(x,z)<11)continue;const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.25,.4,2,6),mat(0x93613d));trunk.position.set(x,1,z);scene.add(trunk);const crown=new THREE.Mesh(new THREE.ConeGeometry(1.5,3,6),mat([0x3f9661,0x56a96b,0x79bd72][i%3]));crown.position.set(x,3,z);scene.add(crown)}
+ const cliff=new THREE.Mesh(new THREE.ConeGeometry(9,12,5),mat(0x7c918b));cliff.position.set(0,5,-39);scene.add(cliff);box(5,5,1.5,mat(0x66727a),0,2,-34);const hole=new THREE.Mesh(new THREE.CircleGeometry(2.1,8),mat(0x263642));hole.position.set(0,2,-33.1);scene.add(hole);
+ player=new THREE.Group();player.position.set(0,0,4);scene.add(player);const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.42,.55,4,8),mat(0x347fb0));torso.position.y=1.35;player.add(torso);const head=new THREE.Mesh(new THREE.SphereGeometry(.34,10,8),mat(0xffc59d));head.position.y=2.12;player.add(head);
+ const spots=[[-5,-7],[5,-12],[-8,-19],[8,-23],[0,-28],[13,-12],[-14,-15]];spots.forEach((p,i)=>{const g=new THREE.Group();g.position.set(p[0],.65,p[1]);const r=new THREE.Mesh(new THREE.DodecahedronGeometry(.9),mat([0x87979a,0x8e9da5,0x7d8d95][i%3]));g.add(r);const crystal=new THREE.Mesh(new THREE.OctahedronGeometry(.24),mat([0x66e0ce,0xffd166,0xa9a0ff][i%3]));crystal.position.y=.7;crystal.visible=false;g.add(crystal);g.userData={alive:true,crystal,index:i};scene.add(g);rocks.push(g)});
+ const chest=box(2,1.3,1.3,mat(0x9b5c30),0,.65,-36);const lid=box(2.05,.48,1.35,mat(0xd58b3c),0,1.45,-36);onResize();animate()}
 function onResize(){if(!renderer)return;camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)}
-function showToast(text){const t=$('toast');t.textContent=text;t.style.opacity='1';clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.opacity='0',2200)}
-function updateHUD(){$('gems').textContent=gems;$('score').textContent=score;$('progress').textContent=answered;$('objective').textContent=answered<TOTAL?`Explore the forest and mine treasure rocks (${answered}/${TOTAL})`:'Return to the cave entrance and unlock the final treasure!'}
-function startGame(){
- playerName=$('playerName').value.trim()||'Explorer';playerClass=$('playerClass').value.trim()||'Year 4';
- $('startScreen').classList.add('hidden');$('hud').classList.remove('hidden');
- running=true;paused=false;finished=false;score=0;gems=0;answered=0;correct=0;yaw=0;pitch=.18;questionQueue=shuffle([...questions]);
- rocks.forEach((r,i)=>{r.visible=true;r.userData.alive=true;r.userData.crystal.visible=false;r.position.y=.65; r.children[0].material=mat([0x87979a,0x8e9da5,0x7d8d95][i%3])});
- player.position.set(0,0,4);player.rotation.y=0;updateHUD();showToast(`Welcome, ${playerName}! Find a rock to mine.`);renderer.domElement.requestPointerLock?.();
-}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function nearestRock(){let best=null,d=3.2;for(const r of rocks){if(!r.userData.alive)continue;const dist=player.position.distanceTo(r.position);if(dist<d){best=r;d=dist}}return best}
-function mine(){if(!running||paused||quizOpen||finished)return;const r=nearestRock();if(!r){showToast('Move closer to a sparkling rock to mine it!');return}openQuiz(r)}
-function openQuiz(rock){
- quizOpen=true;document.exitPointerLock?.();$('quizScreen').classList.remove('hidden');$('feedback').textContent='';$('quizNote').textContent='Answer correctly to break the rock and discover treasure.';
- const q=questionQueue[answered%questionQueue.length];$('questionPicture').textContent=q.pic;$('question').textContent=q.q;$('answers').innerHTML='';
- const answers=shuffle([...q.a]);answers.forEach(answer=>{const b=document.createElement('button');b.textContent=answer;b.onclick=()=>answerQuestion(answer,q,rock,b);$('answers').appendChild(b)});
-}
-function answerQuestion(answer,q,rock,button){
- const all=[...$('answers').querySelectorAll('button')];all.forEach(b=>b.disabled=true);
- if(answer===q.correct){
-  correct++;score+=100;gems+=1;answered++;rock.userData.alive=false;rock.userData.crystal.visible=true;rock.children[0].material=mat(0x5e756c);rock.scale.set(.05,.05,.05);rock.visible=false;
-  $('feedback').textContent='✨ Correct! The rock breaks and you found a gem!';$('feedback').style.color='#247c4e';$('quizNote').textContent=`+100 points · ${q.correct} is correct!`;
-  updateHUD();setTimeout(()=>{$('quizScreen').classList.add('hidden');quizOpen=false;if(answered>=TOTAL){$('objective').textContent='Great work! Head to the cave and unlock the final treasure chest.';showToast('Five challenges complete! Find the cave at the far end of the path.')}else showToast('Treasure collected! Find another rock.');if(running&&!paused)renderer.domElement.requestPointerLock?.()},1200);
- }else{
-  $('feedback').textContent=`Not quite! The correct answer is ${q.correct}. Try again!`;$('feedback').style.color='#b34b36';$('quizNote').textContent='You can try this question again. Read carefully!';
-  setTimeout(()=>{all.forEach(b=>b.disabled=false);$('feedback').textContent='';},1100)
- }
-}
-function interactChest(){
- if(player.position.distanceTo(new THREE.Vector3(0,0,-36))<5){
-  if(answered>=TOTAL){finishGame();return true}
-  showToast(`The treasure chest is locked! Complete ${TOTAL-answered} more mining challenge${TOTAL-answered===1?'':'s'}.`);return true
- }return false
-}
-function finishGame(){
- if(finished)return;finished=true;running=false;document.exitPointerLock?.();$('hud').classList.add('hidden');$('endScreen').classList.remove('hidden');
- $('endGreeting').textContent=`Amazing adventure, ${playerName}${playerClass?` from ${playerClass}`:''}! You found the legendary treasure.`;
- $('endStats').innerHTML=`💎 Gems collected: ${gems}<br>⭐ Final score: ${score}<br>📚 Questions completed: ${answered}<br>✅ Correct answers: ${correct}<br>🏅 Achievement: English Explorer`;
-}
-function resetToStart(){document.exitPointerLock?.();running=false;paused=false;quizOpen=false;finished=false;$('hud').classList.add('hidden');$('quizScreen').classList.add('hidden');$('pauseScreen').classList.add('hidden');$('endScreen').classList.add('hidden');$('startScreen').classList.remove('hidden');}
-function togglePause(){if(!running||quizOpen||finished)return;paused=!paused;$('pauseScreen').classList.toggle('hidden',!paused);if(paused)document.exitPointerLock?.();else renderer.domElement.requestPointerLock?.()}
-function animate(){
- requestAnimationFrame(animate);if(!renderer)return;const dt=Math.min(clock.getDelta(),.04);
- if(running&&!paused&&!quizOpen&&!finished)updateGame(dt);
- renderer.render(scene,camera);
-}
-function updateGame(dt){
- // Smooth third-person camera orbit
- const forward=new THREE.Vector3(Math.sin(yaw),0,-Math.cos(yaw));
- const right=new THREE.Vector3(Math.cos(yaw),0,Math.sin(yaw));
- const move=new THREE.Vector3();
- if(keys.KeyW||keys.ArrowUp)move.add(forward);if(keys.KeyS||keys.ArrowDown)move.sub(forward);if(keys.KeyD||keys.ArrowRight)move.add(right);if(keys.KeyA||keys.ArrowLeft)move.sub(right);
- const moving=move.lengthSq()>0;
- if(moving){move.normalize();const speed=(keys.ShiftLeft||keys.ShiftRight)?10:6.2;player.position.addScaledVector(move,speed*dt);player.rotation.y=Math.atan2(move.x,move.z);playerParts.position.y=Math.sin(performance.now()*.012)*.045;player.userData.limbs.forEach(l=>{l.arm.rotation.x=Math.sin(performance.now()*.012)*.4;l.leg.rotation.x=Math.sin(performance.now()*.012)*.45})}else{playerParts.position.y=0;player.userData.limbs.forEach(l=>{l.arm.rotation.x=0;l.leg.rotation.x=0})}
- player.position.x=THREE.MathUtils.clamp(player.position.x,-39,39);player.position.z=THREE.MathUtils.clamp(player.position.z,-42,39);
- if(keys.Space&&onGround){verticalVelocity=7.5;onGround=false}verticalVelocity-=19*dt;player.position.y+=verticalVelocity*dt;if(player.position.y<=0){player.position.y=0;verticalVelocity=0;onGround=true}
- // camera looks over shoulder and follows
- const target=new THREE.Vector3(player.position.x,player.position.y+1.55,player.position.z);
- const distance=7.5;const horiz=Math.cos(pitch)*distance;
- const desired=new THREE.Vector3(target.x-Math.sin(yaw)*horiz,target.y+2.3+Math.sin(pitch)*distance,target.z+Math.cos(yaw)*horiz);
- camera.position.lerp(desired,1-Math.pow(.001,dt));camera.lookAt(target);
- // gentle bobbing crystals
- rocks.forEach(r=>{if(r.visible&&r.userData.alive){r.rotation.y+=dt*.35;r.position.y=.65+Math.sin(performance.now()*.002+r.userData.index)*.09;r.userData.crystal.rotation.y+=dt}});
- // chest hint
- if(player.position.distanceTo(new THREE.Vector3(0,0,-36))<5){if(answered>=TOTAL)showObjectiveHint();else{}}
-}
-let hintCooldown=0;function showObjectiveHint(){if(performance.now()-hintCooldown>3500){showToast('Press E near the chest to claim the treasure!');hintCooldown=performance.now()}}
-document.addEventListener('keydown',e=>{keys[e.code]=true;if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();if(e.code==='Escape'){if(!quizOpen)togglePause()}if(e.code==='KeyE'){if(!quizOpen){if(player.position.distanceTo(new THREE.Vector3(0,0,-36))<5)interactChest();else mine()}}});
-document.addEventListener('keyup',e=>keys[e.code]=false);
-document.addEventListener('mousemove',e=>{if(document.pointerLockElement===renderer?.domElement&&running&&!paused&&!quizOpen){yaw-=e.movementX*.0035;pitch=THREE.MathUtils.clamp(pitch-e.movementY*.0025,-.1,.65)}});
-document.addEventListener('pointerlockchange',()=>{});
-rendererClickSetup();
-function rendererClickSetup(){/* listener is attached after renderer creation below */}
-$('startBtn').addEventListener('click',()=>{if(!scene){try{init3D()}catch(e){alert('The 3D engine could not load. Check your internet connection and reopen this HTML file.');return}}startGame()});
-$('resumeBtn').onclick=togglePause;$('restartBtn').onclick=()=>{resetToStart()};$('playAgainBtn').onclick=()=>{resetToStart()};
-$('quizScreen').addEventListener('click',e=>e.stopPropagation());
-window.addEventListener('resize',onResize);
-window.addEventListener('contextmenu',e=>e.preventDefault());
-// Click the world to mine; first click locks the pointer and later clicks mine.
-document.addEventListener('click',e=>{if(!renderer||!running||paused||quizOpen||finished)return;if(e.target.closest('button,input,.panel'))return;if(document.pointerLockElement!==renderer.domElement){renderer.domElement.requestPointerLock?.();return}mine()});
+function updateHUD(){$('gems').textContent=gems;$('score').textContent=score;$('progress').textContent=answered;$('objective').textContent=answered<TOTAL?`Explore the forest and mine treasure rocks (${answered}/${TOTAL})`:'Return to the cave and unlock the final treasure!'}
+function startGame(){playerName=$('playerName').value.trim()||'Explorer';playerClass=$('playerClass').value.trim()||'Year 4';$('startScreen').classList.add('hidden');$('hud').classList.remove('hidden');running=true;paused=false;finished=false;score=0;gems=0;answered=0;correct=0;yaw=0;questionQueue=shuffle([...questions]);rocks.forEach(r=>{r.visible=true;r.userData.alive=true;r.userData.crystal.visible=false;r.scale.set(1,1,1)});player.position.set(0,0,4);updateHUD();saveToSheets('English Treasure Quest','Started');renderer.domElement.requestPointerLock?.()}
+function nearestRock(){let best=null,d=3.5;for(const r of rocks){if(!r.userData.alive)continue;const dist=player.position.distanceTo(r.position);if(dist<d){best=r;d=dist}}return best}
+function openQuiz(rock){if(!running||paused||quizOpen||finished)return;currentRock=rock;quizOpen=true;document.exitPointerLock?.();$('quizScreen').classList.remove('hidden');$('feedback').textContent='';const q=questionQueue[answered%questionQueue.length];$('questionPicture').textContent=q.pic;$('question').textContent=q.q;$('answers').innerHTML='';shuffle([...q.a]).forEach(a=>{const b=document.createElement('button');b.textContent=a;b.onclick=()=>answerQuestion(a,q,rock);$('answers').appendChild(b)})}
+function answerQuestion(answer,q,rock){const buttons=[...$('answers').querySelectorAll('button')];buttons.forEach(b=>b.disabled=true);if(answer===q.correct){correct++;score+=100;gems++;answered++;rock.userData.alive=false;rock.userData.crystal.visible=true;rock.visible=false;saveToSheets('Treasure Challenge','In progress');$('feedback').style.color='#247c4e';$('feedback').textContent='✨ Correct! You found a gem!';$('quizNote').textContent=`+100 points · ${q.correct} is correct!`;updateHUD();setTimeout(()=>{$('quizScreen').classList.add('hidden');quizOpen=false;if(answered>=TOTAL){$('objective').textContent='Great work! Head to the cave to unlock the final treasure.'}if(running&&!paused)renderer.domElement.requestPointerLock?.()},900)}else{$('feedback').style.color='#b34b36';$('feedback').textContent=`Not quite! The correct answer is ${q.correct}. Try again!`;setTimeout(()=>{buttons.forEach(b=>b.disabled=false);$('feedback').textContent=''},1000)}}
+function finishGame(){if(finished)return;finished=true;running=false;document.exitPointerLock?.();$('hud').classList.add('hidden');$('endScreen').classList.remove('hidden');saveToSheets('English Treasure Quest','Completed');$('endGreeting').textContent=`Amazing adventure, ${playerName}${playerClass?` from ${playerClass}`:''}! You found the legendary treasure.`;$('endStats').innerHTML=`💎 Gems collected: ${gems}<br>⭐ Final score: ${score}<br>📚 Questions completed: ${answered}<br>✅ Correct answers: ${correct}<br>🏅 Achievement: English Explorer`}
+function resetToStart(){$('hud').classList.add('hidden');$('quizScreen').classList.add('hidden');$('pauseScreen').classList.add('hidden');$('endScreen').classList.add('hidden');$('startScreen').classList.remove('hidden');running=false;paused=false;quizOpen=false;finished=false}
+function animate(){requestAnimationFrame(animate);if(!renderer)return;const dt=Math.min(clock.getDelta(),.04);if(running&&!paused&&!quizOpen&&!finished){const move=new THREE.Vector3();if(keys.KeyW||keys.ArrowUp)move.z-=1;if(keys.KeyS||keys.ArrowDown)move.z+=1;if(keys.KeyA||keys.ArrowLeft)move.x-=1;if(keys.KeyD||keys.ArrowRight)move.x+=1;if(move.lengthSq()){move.normalize();player.position.addScaledVector(move,6*dt);player.position.x=THREE.MathUtils.clamp(player.position.x,-39,39);player.position.z=THREE.MathUtils.clamp(player.position.z,-42,39)}const target=new THREE.Vector3(player.position.x,player.position.y+1.4,player.position.z);const desired=new THREE.Vector3(target.x+5,target.y+3,target.z+6);camera.position.lerp(desired,1-Math.pow(.001,dt));camera.lookAt(target);if(player.position.distanceTo(new THREE.Vector3(0,0,-36))<5&&answered>=TOTAL)finishGame()}renderer.render(scene,camera)}
+$('startBtn').addEventListener('click',()=>{if(!scene){try{init3D()}catch(e){alert('The 3D engine could not load. Check your internet connection and reopen the game.');return}}startGame()});$('resumeBtn').onclick=()=>{paused=false;$('pauseScreen').classList.add('hidden')};$('restartBtn').onclick=resetToStart;$('playAgainBtn').onclick=resetToStart;
+document.addEventListener('keydown',e=>{keys[e.code]=true;if(e.code==='Escape'&&running&&!quizOpen&&!finished){paused=!paused;$('pauseScreen').classList.toggle('hidden',!paused);document.exitPointerLock?.()}if(e.code==='KeyE'&&!quizOpen){if(player&&player.position.distanceTo(new THREE.Vector3(0,0,-36))<5&&answered>=TOTAL)finishGame();else openQuiz(nearestRock())}});document.addEventListener('keyup',e=>keys[e.code]=false);document.addEventListener('click',e=>{if(!renderer||!running||paused||quizOpen||finished||e.target.closest('button,input,.panel'))return;if(document.pointerLockElement!==renderer.domElement){renderer.domElement.requestPointerLock?.();return}openQuiz(nearestRock())});window.addEventListener('resize',onResize);
 })();
-</script>
-</body>
-</html>
+</script></body></html>
