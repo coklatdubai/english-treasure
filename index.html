@@ -1,133 +1,1675 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>English Treasure Quest</title>
+<title>English Treasure Quest — Wildlife Guardians Expedition</title>
 <style>
-:root{--ink:#20334a;--green:#2f875e;--gold:#ffd166;--cream:#fff9e9}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:system-ui,Arial,sans-serif;color:var(--ink);background:#9edcf0}#game{position:fixed;inset:0}canvas{display:block}.panel{background:rgba(255,249,233,.97);border:3px solid white;box-shadow:0 10px 30px #1d3b4d30;border-radius:22px;padding:24px}.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(#143d5230,#143d5260);z-index:5}.hidden{display:none!important}#startPanel,#quizPanel,#pausePanel,#endPanel{width:min(570px,96vw);text-align:center}.logo{font-weight:1000;font-size:clamp(2rem,6vw,3.3rem);line-height:.95;color:#23744e;margin:8px 0 14px}.subtitle{font-weight:700;color:#496273;margin:0 auto 20px;max-width:400px}input{width:100%;padding:13px 14px;border:2px solid #c6d9d0;border-radius:12px;margin:5px 0 10px;font:inherit}button{border:0;border-radius:13px;padding:12px 18px;background:var(--green);color:white;font-weight:800;font-size:1rem;cursor:pointer;margin:3px}button.secondary{background:#527c91}button.gold{background:#e7a928;color:#33270c}button:disabled{opacity:.6;cursor:not-allowed}#hud{position:fixed;inset:0;pointer-events:none;z-index:2;color:white;text-shadow:0 2px 4px #1d3446}.hudtop{display:flex;justify-content:space-between;gap:10px;padding:16px}.badge{background:#1f4e45dc;border:2px solid #ffffffa8;border-radius:14px;padding:10px 14px;font-weight:900}#objective{position:absolute;top:85px;left:50%;transform:translateX(-50%);background:#fff9e9ee;color:#24435a;text-shadow:none;border-radius:14px;padding:10px 16px;font-weight:800;text-align:center;max-width:90vw}#hint{position:absolute;bottom:16px;left:16px;background:#173d4dcc;padding:12px 14px;border-radius:14px;line-height:1.6;font-size:.88rem}#question{font-size:clamp(1.25rem,3.8vw,2rem);font-weight:950;line-height:1.2;margin:12px 0}#questionPicture{font-size:3rem}#answers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}#answers button{background:#e8f4e9;color:#24435a;border:2px solid white}#feedback{font-weight:900;min-height:28px}.small{font-size:.86rem;color:#536c78;line-height:1.5}#endStats{font-size:1.05rem;font-weight:800;line-height:1.9;margin:15px}@media(max-width:520px){.panel{padding:18px}.hudtop{padding:8px}.badge{padding:7px;font-size:.8rem}#hint{font-size:.72rem}#answers{grid-template-columns:1fr}}
+:root {
+  --ink: #1d3549;
+  --green: #2b8257;
+  --gold: #f4b942;
+  --cream: #fff9eb;
+  --jungle-bg: none;
+}
+* { box-sizing: border-box; user-select: none; }
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--ink);
+  background-color: #163a2c;
+  background-image: var(--jungle-bg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+#bgBackdrop {
+  position: fixed;
+  inset: 0;
+  background-image: var(--jungle-bg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+#gameWrap {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#gameCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background-image:
+    linear-gradient(rgba(12, 38, 29, 0.5), rgba(12, 38, 29, 0.74)),
+    var(--jungle-bg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: 6;
+}
+.hidden { display: none !important; }
+.panel {
+  background: rgba(255, 249, 235, 0.96);
+  border: 3px solid #ffffff;
+  box-shadow: 0 14px 40px rgba(8, 28, 22, 0.55);
+  border-radius: 24px;
+  padding: 20px;
+  max-height: 96vh;
+  overflow-y: auto;
+  text-align: center;
+}
+#startPanel, #endPanel { width: min(550px, 96vw); }
+#mapPanel {
+  width: min(980px, 97vw);
+  padding: 14px 16px 16px;
+  background: linear-gradient(180deg, #f9f1dc 0%, #efe2c0 100%);
+  border: 4px solid #8c6d3f;
+}
+.hero-art {
+  width: 100%;
+  height: 165px;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 3px solid #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
+  margin-bottom: 10px;
+}
+.logo {
+  font-weight: 950;
+  font-size: clamp(1.75rem, 4.6vw, 2.55rem);
+  line-height: 1;
+  color: #1f6f48;
+  margin: 6px 0 8px;
+}
+.subtitle {
+  font-weight: 700;
+  color: #466070;
+  margin: 0 auto 12px;
+  max-width: 540px;
+  font-size: 0.94rem;
+}
+input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 2px solid #bfd6cb;
+  border-radius: 12px;
+  margin: 4px 0 10px;
+  font: inherit;
+  user-select: text;
+}
+button {
+  border: 0;
+  border-radius: 13px;
+  padding: 10px 16px;
+  background: var(--green);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: transform 0.14s ease, filter 0.14s ease;
+}
+button:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.06); }
+button.secondary { background: #4d778b; }
+button.gold { background: #e8a825; color: #2f2206; border: 2px solid #ffffff; }
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+.icon-sm { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+.icon-md { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
+
+/* Map Top Bar */
+.map-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.map-pill {
+  font-weight: 850;
+  background: #fff9eb;
+  border: 2px solid #cbb382;
+  color: #3a2a10;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.sound-btn {
+  background: #2b6e57;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 850;
+  pointer-events: auto;
+}
+.sound-btn.muted {
+  background: #6c757d;
+}
+
+/* Illustrated Wildlife Guardians Expedition Map Stage */
+.expedition-map-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 68vh;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 5px solid #6f5228;
+  box-shadow: 0 10px 28px rgba(20, 35, 28, 0.38), inset 0 0 0 3px #d4b475;
+  background: #0e5a7a;
+}
+.expedition-map-frame svg.map-art-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Interactive Glowing Orb Pins on Map */
+.map-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  z-index: 3;
+  transition: transform 0.18s ease;
+}
+.map-pin:hover:not(:disabled) {
+  transform: translate(-50%, -54%) scale(1.08);
+  filter: none;
+}
+.orb-ring {
+  width: clamp(44px, 5.6vw, 60px);
+  height: clamp(44px, 5.6vw, 60px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 950;
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  color: #ffffff;
+  border: 3px solid #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
+  position: relative;
+  animation: orbPulse 2.1s infinite ease-in-out;
+}
+.orb-green {
+  background: radial-gradient(circle at 35% 30%, #b7ff7a, #2dc653 58%, #157331);
+  box-shadow: 0 0 22px 6px rgba(74, 242, 107, 0.78);
+}
+.orb-gold {
+  background: radial-gradient(circle at 35% 30%, #fff6a3, #f4b942 58%, #b56e08);
+  box-shadow: 0 0 22px 6px rgba(255, 209, 102, 0.82);
+}
+.orb-blue {
+  background: radial-gradient(circle at 35% 30%, #ade8f4, #0096c7 58%, #023e8a);
+  box-shadow: 0 0 22px 6px rgba(72, 202, 228, 0.82);
+}
+.orb-coral {
+  background: radial-gradient(circle at 35% 30%, #ffb3c1, #e63946 58%, #800f2f);
+  box-shadow: 0 0 24px 7px rgba(255, 92, 119, 0.85);
+}
+.map-pin:disabled .orb-coral {
+  background: radial-gradient(circle at 35% 30%, #ced4da, #6c757d 65%, #343a40);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  animation: none;
+}
+@keyframes orbPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.07); }
+}
+.pin-banner {
+  background: linear-gradient(180deg, #3b2a18, #23170b);
+  color: #fff8e7;
+  border: 2px solid #d8b26e;
+  border-radius: 999px;
+  padding: 3px 11px;
+  font-size: clamp(0.66rem, 1.15vw, 0.82rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.pin-sub {
+  background: rgba(255, 250, 235, 0.94);
+  color: #1f3b2c;
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-size: clamp(0.6rem, 0.95vw, 0.72rem);
+  font-weight: 800;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+.orb-check {
+  position: absolute;
+  right: -6px;
+  top: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  padding: 1px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* Gameplay HUD */
+#hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+.hud-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+}
+.hud-left, .hud-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.badge {
+  background: rgba(25, 68, 54, 0.92);
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.82);
+  border-radius: 14px;
+  padding: 7px 13px;
+  font-weight: 900;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  pointer-events: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+#backToMapBtn {
+  pointer-events: auto;
+  background: #f4b942;
+  color: #2d1f04;
+  border: 2px solid #ffffff;
+  padding: 7px 14px;
+  border-radius: 14px;
+  font-weight: 900;
+}
+#promptBanner {
+  position: absolute;
+  top: 66px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 250, 236, 0.97);
+  border: 3px solid #ffffff;
+  border-radius: 18px;
+  padding: 8px 20px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+  text-align: center;
+  max-width: min(680px, 94vw);
+  pointer-events: auto;
+}
+#promptWord {
+  font-size: clamp(1.1rem, 2.8vw, 1.5rem);
+  font-weight: 950;
+  color: #1b6ca8;
+  letter-spacing: 0.03em;
+}
+#promptClue {
+  font-size: 0.88rem;
+  font-weight: 750;
+  color: #3d5666;
+  margin-top: 2px;
+}
+#toastMsg {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(25, 68, 54, 0.95);
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 999px;
+  padding: 9px 20px;
+  font-weight: 850;
+  font-size: 0.94rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* On-Screen Touch / Mouse D-Pad */
+#dpad {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 128px;
+  height: 128px;
+  z-index: 5;
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 4px;
+}
+.dpad-btn {
+  background: rgba(255, 255, 255, 0.84);
+  border: 2px solid #2b8257;
+  border-radius: 12px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.dpad-btn:active { background: #bfe8d0; transform: scale(0.95); }
+.dpad-btn img { width: 20px; height: 20px; pointer-events: none; }
+
+#endStats {
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.85;
+  margin: 12px auto;
+  display: inline-block;
+  text-align: left;
+  background: #f3efe0;
+  padding: 12px 22px;
+  border-radius: 16px;
+}
+.stat-row { display: flex; align-items: center; gap: 10px; margin: 4px 0; }
+
+@media(max-width: 680px) {
+  .expedition-map-frame { aspect-ratio: 4 / 3; }
+  .pin-sub { display: none; }
+  #dpad { width: 112px; height: 112px; right: 10px; bottom: 10px; }
+  #promptBanner { top: 62px; padding: 7px 14px; }
+}
 </style>
 </head>
 <body>
-<div id="game"></div>
-<div id="hud" class="hidden"><div class="hudtop"><div class="badge">💎 Gems: <span id="gems">0</span></div><div class="badge">🧭 Quest: <span id="progress">0</span>/5</div><div class="badge">⭐ Score: <span id="score">0</span></div></div><div id="objective">Explore the forest and mine 5 treasure rocks!</div><div id="hint"><b>CONTROLS</b><br>W A S D / Arrow keys — Move<br>Mouse — Look around<br>Click / E — Mine nearby rock<br>ESC — Pause</div></div>
-<div class="overlay" id="startScreen"><div class="panel" id="startPanel"><div style="font-size:3rem">🌿 💎 🧭</div><div class="logo">ENGLISH<br>TREASURE QUEST</div><p class="subtitle">Explore a colourful 3D world, answer English questions, and unlock the hidden treasure!</p><label for="playerName"><b>Explorer name</b></label><input id="playerName" maxlength="24" placeholder="Enter your name"><label for="playerClass"><b>Class</b></label><input id="playerClass" maxlength="24" placeholder="e.g. Year 4 Bestari"><p class="small">Best on a computer. Internet is needed to load the 3D engine.</p><button id="startBtn" style="width:100%;font-size:1.15rem;padding:15px">▶ START ADVENTURE</button></div></div>
-<div class="overlay hidden" id="quizScreen"><div class="panel" id="quizPanel"><div style="font-weight:900;color:#63816e">⛏️ MINING CHALLENGE</div><div id="questionPicture"></div><div id="question">Choose the correct answer.</div><div id="answers"></div><div id="feedback" aria-live="polite"></div><div id="quizNote" class="small">Answer correctly to break the rock and discover treasure.</div></div></div>
-<div class="overlay hidden" id="pauseScreen"><div class="panel" id="pausePanel"><h1>Adventure paused</h1><button id="resumeBtn">▶ Resume</button><button class="secondary" id="restartBtn">↻ Restart</button></div></div>
-<div class="overlay hidden" id="endScreen"><div class="panel" id="endPanel"><div style="font-size:4rem">🏆</div><div class="logo" style="font-size:2.5rem">TREASURE FOUND!</div><p id="endGreeting"></p><div id="endStats"></div><p class="small">Great work! Keep practising your English vocabulary.</p><button id="playAgainBtn">↻ Play Again</button></div></div>
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<div id="bgBackdrop"></div>
+<div id="gameWrap">
+  <canvas id="gameCanvas" width="1000" height="620"></canvas>
+</div>
+
+<!-- Gameplay HUD -->
+<div id="hud" class="hidden">
+  <div class="hud-top">
+    <div class="hud-left">
+      <button id="backToMapBtn" type="button"><img id="hudMapIcon" class="icon-sm" alt=""> Expedition Map</button>
+      <div class="badge"><img id="hudCompassIcon" class="icon-sm" alt=""> <span id="stationLabel">Station 1</span>: <span id="stationProgress">0/4</span></div>
+    </div>
+    <div class="hud-right">
+      <div class="badge"><img id="hudGemIcon" class="icon-sm" alt=""> Gems: <span id="gemsText">0</span></div>
+      <div class="badge"><img id="hudStarIcon" class="icon-sm" alt=""> Score: <span id="scoreText">0</span></div>
+      <button id="hudSoundBtn" class="sound-btn" type="button"><img id="hudSoundIcon" class="icon-sm" alt=""> <span id="hudSoundLabel">Sound: ON</span></button>
+    </div>
+  </div>
+  <div id="promptBanner">
+    <div id="promptWord">WALK TO THE ANIMAL</div>
+    <div id="promptClue">Use Arrow Keys, WASD, or tap anywhere to move your explorer!</div>
+  </div>
+  <div id="toastMsg" class="hidden">Great job!</div>
+
+  <div id="dpad">
+    <div></div>
+    <button class="dpad-btn" data-dir="up" aria-label="Move Up"><img id="arrUp" alt=""></button>
+    <div></div>
+    <button class="dpad-btn" data-dir="left" aria-label="Move Left"><img id="arrLeft" alt=""></button>
+    <div></div>
+    <button class="dpad-btn" data-dir="right" aria-label="Move Right"><img id="arrRight" alt=""></button>
+    <div></div>
+    <button class="dpad-btn" data-dir="down" aria-label="Move Down"><img id="arrDown" alt=""></button>
+    <div></div>
+  </div>
+</div>
+
+<!-- STEP 1: START SCREEN -->
+<div class="overlay" id="startScreen">
+  <div class="panel" id="startPanel">
+    <img id="startBannerImg" class="hero-art" alt="Rainforest Expedition">
+    <div class="logo">ENGLISH TREASURE QUEST</div>
+    <p class="subtitle">Enter your explorer details to open the Wildlife Guardians Expedition Map and explore 3 Year 4 Animal Stations!</p>
+    <div style="text-align:left">
+      <label for="playerName"><b>Explorer Name</b></label>
+      <input id="playerName" maxlength="26" placeholder="Enter your name">
+      <label for="playerClass"><b>Class</b></label>
+      <input id="playerClass" maxlength="24" placeholder="e.g. Year 4 Bestari">
+    </div>
+    <button id="startBtn" style="width:100%;font-size:1.08rem;padding:14px;margin-top:6px">
+      <img id="startPlayIcon" class="icon-sm" alt=""> OPEN EXPEDITION MAP
+    </button>
+  </div>
+</div>
+
+<!-- STEP 2: ILLUSTRATED WILDLIFE GUARDIANS EXPEDITION MAP -->
+<div class="overlay hidden" id="mapScreen">
+  <div class="panel" id="mapPanel">
+    <div class="map-topbar">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span class="map-pill"><img id="mapExplorerIcon" class="icon-sm" alt=""> <span id="explorerTag">Explorer</span></span>
+        <span class="map-pill"><img id="mapGemIcon" class="icon-sm" alt=""> Gems: <span id="mapGemsText">0</span></span>
+        <span class="map-pill"><img id="mapStarIcon" class="icon-sm" alt=""> Score: <span id="mapScoreText">0</span></span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span class="map-pill" style="background:#e7f7ed;border-color:#52b788;color:#1b4332">
+          Stations Cleared: <span id="stationsClearedText">0</span>/3
+        </span>
+        <button id="mapSoundBtn" class="sound-btn" type="button"><img id="mapSoundIcon" class="icon-sm" alt=""> <span id="mapSoundLabel">Sound: ON</span></button>
+      </div>
+    </div>
+
+    <!-- Full Illustrated Isometric Island Map matching Wildlife Guardians Expedition Map -->
+    <div class="expedition-map-frame">
+      <svg class="map-art-svg" viewBox="0 0 1100 620" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="oceanGrad" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" stop-color="#38b6c4"/>
+            <stop offset="55%" stop-color="#14749b"/>
+            <stop offset="100%" stop-color="#0b4668"/>
+          </radialGradient>
+          <linearGradient id="shallows" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#90e0ef" stop-opacity="0.85"/>
+            <stop offset="100%" stop-color="#48cae4" stop-opacity="0.5"/>
+          </linearGradient>
+          <linearGradient id="landGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#74c69d"/>
+            <stop offset="55%" stop-color="#52b788"/>
+            <stop offset="100%" stop-color="#2d6a4f"/>
+          </linearGradient>
+          <linearGradient id="scrollGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#faedcd"/>
+            <stop offset="50%" stop-color="#f3d5a5"/>
+            <stop offset="100%" stop-color="#d4a373"/>
+          </linearGradient>
+          <linearGradient id="snowGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#cfe8f3"/>
+          </linearGradient>
+          <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e0fbfc"/>
+            <stop offset="50%" stop-color="#72efdd"/>
+            <stop offset="100%" stop-color="#0096c7"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Deep Ocean & Coastal Turquoise Shallows -->
+        <rect width="1100" height="620" fill="url(#oceanGrad)"/>
+        <path d="M95,380 C80,255 185,130 355,105 C495,85 570,125 685,78 C835,45 975,115 995,245 C1018,375 965,505 825,535 C690,562 630,495 545,555 C415,595 205,565 130,475 Z" fill="url(#shallows)"/>
+
+        <!-- Coastal Sandy Beach & Coral Bay -->
+        <path d="M125,385 C120,275 215,155 365,130 C495,110 575,148 690,102 C825,72 950,138 965,255 C980,368 935,485 805,508 C695,525 655,445 565,450 C520,452 555,535 455,550 C340,565 185,515 140,445 Z" fill="#f4d58d" stroke="#fff3b0" stroke-width="5"/>
+
+        <!-- Main Lush Island Landmass -->
+        <path d="M135,375 C135,270 225,162 370,140 C495,122 575,155 692,108 C820,82 940,145 955,255 C968,362 925,472 798,492 C698,506 668,430 562,422 C465,415 350,472 245,458 C168,448 135,412 135,375 Z" fill="url(#landGrad)" stroke="#1b4332" stroke-width="4"/>
+
+        <!-- Western Rocky Cliffs -->
+        <path d="M130,365 L155,445 L245,475 L270,435 L185,395 Z" fill="#7f7968" stroke="#4a453a" stroke-width="3"/>
+
+        <!-- NORTH-WEST: MOUNTAIN FORESTS (THE CLOUD PEAKS) & SAPPHIRE LAKE -->
+        <g>
+          <!-- Mountain Base -->
+          <polygon points="185,315 280,155 375,310" fill="#6c7a89"/>
+          <polygon points="260,305 365,115 475,295" fill="#5c6b7a"/>
+          <polygon points="365,290 455,100 555,280" fill="#7b8a97"/>
+          <polygon points="220,330 315,190 410,330" fill="#7f8c8d"/>
+          <!-- Snow Caps -->
+          <polygon points="280,155 248,208 272,200 286,216 302,198 315,210" fill="url(#snowGrad)"/>
+          <polygon points="365,115 328,180 352,170 368,190 388,168 405,182" fill="url(#snowGrad)"/>
+          <polygon points="455,100 418,168 442,156 458,176 478,155 496,170" fill="url(#snowGrad)"/>
+          <polygon points="315,190 288,236 312,228 326,242 344,226" fill="url(#snowGrad)"/>
+          <!-- Sapphire Lake -->
+          <ellipse cx="368" cy="245" rx="56" ry="22" fill="#48cae4" stroke="#e0fbfc" stroke-width="3"/>
+          <text x="368" y="249" font-family="Arial" font-weight="900" font-size="10" fill="#03045e" text-anchor="middle">SAPPHIRE LAKE</text>
+          <!-- Conifer / Pine Trees -->
+          <g fill="#1b4332">
+            <polygon points="190,340 202,304 214,340"/><polygon points="212,352 225,312 238,352"/>
+            <polygon points="240,344 252,306 264,344"/><polygon points="268,354 280,316 292,354"/>
+            <polygon points="468,285 480,248 492,285"/><polygon points="492,295 504,258 516,295"/>
+          </g>
+          <!-- Mountain Forests Ribbon -->
+          <rect x="235" y="292" width="175" height="28" rx="6" fill="#2c4969" stroke="#a8dadc" stroke-width="2"/>
+          <text x="322" y="311" font-family="Arial" font-weight="900" font-size="14" fill="#ffffff" text-anchor="middle">MOUNTAIN FORESTS</text>
+          <!-- Soaring Snow Eagle Illustration -->
+          <path d="M368,86 Q388,68 408,84 Q428,68 448,86 Q426,88 408,98 Q390,88 368,86 Z" fill="#ffffff" stroke="#2c4969" stroke-width="2.2"/>
+        </g>
+
+        <!-- NORTH-EAST: GIANT RAINFOREST CANOPY & EMERALD CASCADES -->
+        <g>
+          <!-- Giant Emergent Rainforest Trees -->
+          <path d="M640,165 L640,95 M628,165 L636,110 M652,165 L644,110" stroke="#6f4518" stroke-width="10" stroke-linecap="round"/>
+          <ellipse cx="640" cy="82" rx="64" ry="34" fill="#2d6a4f"/>
+          <ellipse cx="625" cy="74" rx="46" ry="24" fill="#52b788"/>
+          <path d="M775,165 L775,92 M763,165 L771,108 M787,165 L779,108" stroke="#6f4518" stroke-width="11" stroke-linecap="round"/>
+          <ellipse cx="775" cy="78" rx="68" ry="36" fill="#1b4332"/>
+          <ellipse cx="785" cy="70" rx="48" ry="25" fill="#40916c"/>
+
+          <!-- Rainforest Cliff & Emerald Waterfall -->
+          <path d="M845,145 L935,145 L945,255 L835,255 Z" fill="#5b7a68"/>
+          <path d="M872,145 Q892,145 908,148 L918,255 L862,255 Z" fill="url(#waterGrad)"/>
+          <ellipse cx="890" cy="258" rx="44" ry="14" fill="#48cae4"/>
+
+          <!-- Rainforest Banner -->
+          <rect x="838" y="88" width="136" height="28" rx="6" fill="#6b8e4e" stroke="#e9f5db" stroke-width="2"/>
+          <text x="906" y="107" font-family="Arial" font-weight="900" font-size="14" fill="#fff9eb" text-anchor="middle">RAINFOREST</text>
+
+          <!-- Pink Orchids -->
+          <circle cx="635" cy="182" r="5" fill="#ff758f"/><circle cx="648" cy="188" r="5" fill="#c77dff"/><circle cx="660" cy="179" r="5" fill="#ff758f"/>
+        </g>
+
+        <!-- WINDING RIVER ("THE SERPENT RUN") & HIDDEN FALLS -->
+        <path d="M560,185 C585,245 505,275 495,335 C488,385 605,405 685,465" fill="none" stroke="#0096c7" stroke-width="24" stroke-linecap="round"/>
+        <path d="M560,185 C585,245 505,275 495,335 C488,385 605,405 685,465" fill="none" stroke="#72efdd" stroke-width="12" stroke-linecap="round"/>
+        <path d="M568,242 C665,268 775,265 885,255" fill="none" stroke="#0096c7" stroke-width="20" stroke-linecap="round"/>
+        <path d="M568,242 C665,268 775,265 885,255" fill="none" stroke="#72efdd" stroke-width="10" stroke-linecap="round"/>
+        <!-- Lower Hidden Falls -->
+        <path d="M845,258 L875,258 L885,355 L838,355 Z" fill="url(#waterGrad)"/>
+        <ellipse cx="862" cy="360" rx="38" ry="13" fill="#48cae4"/>
+
+        <!-- Wooden Rope Bridges -->
+        <rect x="572" y="388" width="44" height="12" rx="3" transform="rotate(-28 594 394)" fill="#bc6c25" stroke="#582f0e" stroke-width="2"/>
+        <rect x="812" y="244" width="38" height="11" rx="3" transform="rotate(12 831 249)" fill="#bc6c25" stroke="#582f0e" stroke-width="2"/>
+
+        <!-- CENTER-RIGHT: MAYA RUINS & JUNGLE VALLEY -->
+        <g>
+          <!-- Stepped Stone Pyramid -->
+          <polygon points="585,338 665,338 652,316 598,316" fill="#989582" stroke="#4a483d" stroke-width="2"/>
+          <polygon points="598,316 652,316 641,296 609,296" fill="#b0ad99" stroke="#4a483d" stroke-width="2"/>
+          <rect x="615" y="280" width="20" height="16" fill="#858270" stroke="#4a483d" stroke-width="2"/>
+          <rect x="621" y="316" width="8" height="22" fill="#3a382e"/>
+          <text x="625" y="353" font-family="Arial" font-weight="900" font-size="11" fill="#fff9eb" text-anchor="middle">MAYA RUINS</text>
+
+          <!-- Jungle Valley Banner -->
+          <rect x="678" y="380" width="152" height="26" rx="6" fill="#386641" stroke="#d8f3dc" stroke-width="2"/>
+          <text x="754" y="398" font-family="Arial" font-weight="900" font-size="13" fill="#ffffff" text-anchor="middle">JUNGLE VALLEY</text>
+        </g>
+
+        <!-- EXPEDITION CAMPS & SHELL COVE PORT -->
+        <g>
+          <!-- Base Camp Alpha Tent -->
+          <polygon points="428,395 446,368 464,395" fill="#f4a261" stroke="#7f4f24" stroke-width="2"/>
+          <text x="446" y="410" font-family="Arial" font-weight="800" font-size="10" fill="#fff9eb" text-anchor="middle">Base Camp</text>
+
+          <!-- Shell Cove Port Huts & Wooden Pier -->
+          <rect x="315" y="425" width="26" height="22" rx="3" fill="#dda15e" stroke="#7f4f24" stroke-width="2"/>
+          <polygon points="311,426 328,410 345,426" fill="#bc6c25"/>
+          <rect x="350" y="435" width="26" height="22" rx="3" fill="#dda15e" stroke="#7f4f24" stroke-width="2"/>
+          <polygon points="346,436 363,420 380,436" fill="#e76f51"/>
+          <rect x="358" y="458" width="16" height="36" fill="#9c6644" stroke="#582f0e" stroke-width="2"/>
+
+          <!-- Coral Reef & Sea Turtle in South Lagoon -->
+          <circle cx="575" cy="525" r="14" fill="#ff758f" opacity="0.8"/>
+          <circle cx="595" cy="532" r="11" fill="#ffb703" opacity="0.85"/>
+          <ellipse cx="535" cy="500" rx="14" ry="10" fill="#2d6a4f" stroke="#d8f3dc" stroke-width="1.5"/>
+          <circle cx="520" cy="497" r="4.5" fill="#52b788"/>
+
+          <!-- Coral Coast Scroll -->
+          <rect x="290" y="535" width="138" height="28" rx="6" fill="url(#scrollGrad)" stroke="#7f4f24" stroke-width="2.5"/>
+          <text x="359" y="554" font-family="Arial" font-weight="900" font-size="13" fill="#4a2c11" text-anchor="middle">CORAL COAST</text>
+        </g>
+
+        <!-- Dotted Expedition Trails Connecting All Stations -->
+        <path d="M446,385 Q540,300 765,195" fill="none" stroke="#fff3b0" stroke-width="4" stroke-dasharray="7 7" stroke-linecap="round"/>
+        <path d="M765,195 Q815,260 775,328" fill="none" stroke="#fff3b0" stroke-width="4" stroke-dasharray="7 7" stroke-linecap="round"/>
+        <path d="M446,385 Q475,265 445,148" fill="none" stroke="#fff3b0" stroke-width="4" stroke-dasharray="7 7" stroke-linecap="round"/>
+        <path d="M446,385 Q465,455 485,522" fill="none" stroke="#fff3b0" stroke-width="4" stroke-dasharray="7 7" stroke-linecap="round"/>
+
+        <!-- TOP-LEFT PARCHMENT TITLE SCROLL (WILDLIFE GUARDIANS EXPEDITION MAP) -->
+        <g transform="translate(36, 28)">
+          <rect x="0" y="8" width="22" height="86" rx="8" fill="#d4a373" stroke="#6f4518" stroke-width="3"/>
+          <rect x="16" y="14" width="250" height="74" fill="url(#scrollGrad)" stroke="#6f4518" stroke-width="3"/>
+          <rect x="260" y="8" width="22" height="86" rx="8" fill="#d4a373" stroke="#6f4518" stroke-width="3"/>
+          <text x="141" y="45" font-family="Georgia, serif" font-weight="900" font-size="18" fill="#3d230a" text-anchor="middle">WILDLIFE GUARDIANS</text>
+          <text x="141" y="69" font-family="Georgia, serif" font-weight="900" font-size="16" fill="#5c3814" text-anchor="middle">EXPEDITION MAP</text>
+        </g>
+
+        <!-- Ornate Jungle Vines & Corner Shells Frame -->
+        <rect x="8" y="8" width="1084" height="604" rx="14" fill="none" stroke="#9c7a44" stroke-width="10"/>
+        <path d="M12,95 Q28,220 10,360 T16,585" fill="none" stroke="#2d6a4f" stroke-width="7" stroke-linecap="round"/>
+        <path d="M1088,85 Q1070,230 1090,380 T1082,585" fill="none" stroke="#2d6a4f" stroke-width="7" stroke-linecap="round"/>
+        <!-- Corner Seashells -->
+        <circle cx="24" cy="24" r="14" fill="#f4a261" stroke="#7f4f24" stroke-width="2.5"/>
+        <circle cx="1076" cy="24" r="14" fill="#f4a261" stroke="#7f4f24" stroke-width="2.5"/>
+        <circle cx="24" cy="596" r="14" fill="#ffb5a7" stroke="#7f4f24" stroke-width="2.5"/>
+        <circle cx="1076" cy="596" r="14" fill="#e76f51" stroke="#7f4f24" stroke-width="2.5"/>
+      </svg>
+
+      <!-- INTERACTIVE GLOWING STATION PINS ON THE ISLAND -->
+      <!-- Station 1: Orchid Haven (Green Orb 1) -->
+      <button id="btnStation1" class="map-pin" style="left: 71%; top: 31%;" type="button">
+        <div class="orb-ring orb-green">
+          1
+          <img id="checkS1" class="orb-check hidden" alt="Completed">
+        </div>
+        <div class="pin-banner">ORCHID HAVEN</div>
+        <div class="pin-sub">Walk &amp; Match Animals</div>
+      </button>
+
+      <!-- Station 2: Hidden Falls & Maya Ruins (Gold Orb 2) -->
+      <button id="btnStation2" class="map-pin" style="left: 72%; top: 57%;" type="button">
+        <div class="orb-ring orb-gold">
+          2
+          <img id="checkS2" class="orb-check hidden" alt="Completed">
+        </div>
+        <div class="pin-banner">HIDDEN FALLS RUINS</div>
+        <div class="pin-sub">Ancient Temple Maze</div>
+      </button>
+
+      <!-- Station 3: Eagle's Summit & Serpent Run (Blue Orb 3) -->
+      <button id="btnStation3" class="map-pin" style="left: 41%; top: 24%;" type="button">
+        <div class="orb-ring orb-blue">
+          3
+          <img id="checkS3" class="orb-check hidden" alt="Completed">
+        </div>
+        <div class="pin-banner">EAGLE'S SUMMIT</div>
+        <div class="pin-sub">Animal Clue Rescue</div>
+      </button>
+
+      <!-- Final Treasure: Coral Coast Treasure (Coral/Red Orb 4) -->
+      <button id="claimTreasureBtn" class="map-pin" style="left: 46%; top: 84%;" type="button" disabled>
+        <div class="orb-ring orb-coral">
+          <img id="treasureOrbIcon" style="width:26px;height:26px" alt="">
+        </div>
+        <div class="pin-banner" id="treasureBannerText">LOCKED TREASURE (0/3)</div>
+        <div class="pin-sub">Clear Stations 1, 2 &amp; 3</div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3: FINAL VICTORY SCREEN -->
+<div class="overlay hidden" id="endScreen">
+  <div class="panel" id="endPanel">
+    <img id="endBannerImg" class="hero-art" alt="Waterfall Ruins Treasure">
+    <div style="margin-top:-32px">
+      <img id="endTrophyIcon" style="width:68px;height:68px;background:#fff9eb;border-radius:50%;padding:6px;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.22)" alt="Trophy">
+    </div>
+    <div class="logo" style="font-size:2.15rem">TREASURE UNLOCKED!</div>
+    <p id="endGreeting" style="font-weight:750;margin:6px 0"></p>
+    <div id="endStats"></div>
+    <p class="subtitle" style="font-size:0.86rem;margin-bottom:10px">Wonderful work mastering Year 4 Amazing Animals!</p>
+    <div>
+      <button id="backMapEndBtn" class="secondary"><img id="endMapIcon" class="icon-sm" alt=""> View Map</button>
+      <button id="playAgainBtn"><img id="endRestartIcon" class="icon-sm" alt=""> New Explorer</button>
+    </div>
+  </div>
+</div>
+
 <script>
-(()=>{
-'use strict';
-const $=id=>document.getElementById(id);
-// Google Sheets tracking: keep this URL as your deployed Apps Script web app URL.
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKV1bDYURkQfDnqb7QjPGfDvMeKrsJkUhhEtbE0lMYAt1qSE48nXw7UDf_7kg5vX4rqg/exec";
-let playerName='Explorer',playerClass='',score=0,gems=0,answered=0,correct=0,finished=false,running=false,paused=false,quizOpen=false;
-function saveToSheets(activity,status){
-  const data=new URLSearchParams({name:playerName,studentClass:playerClass,activity,score:String(score),correctAnswers:String(correct),questionsCompleted:String(answered),gems:String(gems),status});
-  return fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',body:data}).catch(err=>console.error('Could not submit game record:',err));
-}
-let scene,camera,renderer,clock,player,rocks=[],keys={},yaw=0,questionQueue=[],currentRock=null,animationStarted=false;
-const TOTAL=5;
-const questions=[
- {pic:'🐇',q:'Which word names this animal?',a:['Rabbit','Shark','Spider','Snail'],correct:'Rabbit'},
- {pic:'🐬',q:'Which animal lives in the sea and can leap out of the water?',a:['Panda','Dolphin','Rabbit','Snake'],correct:'Dolphin'},
- {pic:'🐼',q:'Choose the correct spelling.',a:['Panda','Penda','Pandae','Pendae'],correct:'Panda'},
- {pic:'📚',q:'Where can you borrow books to read?',a:['Library','Kitchen','Garden','Bathroom'],correct:'Library'},
- {pic:'🦈',q:'Which animal has sharp teeth and lives in the sea?',a:['Snail','Rabbit','Shark','Panda'],correct:'Shark'},
- {pic:'🕷️',q:'Which animal has eight legs?',a:['Fish','Spider','Dolphin','Snake'],correct:'Spider'},
- {pic:'🎨',q:'Which word means “not noisy”?',a:['Loud','Boring','Quiet','Huge'],correct:'Quiet'},
- {pic:'🐌',q:'Which animal moves very slowly?',a:['Snail','Shark','Dolphin','Spider'],correct:'Snail'},
- {pic:'✏️',q:'What do pupils do at home after a lesson?',a:['Homework','Holiday','Library','Teacher'],correct:'Homework'},
- {pic:'🐍',q:'Choose the correct spelling.',a:['Snake','Snaek','Snak','Sneik'],correct:'Snake'},
- {pic:'🌟',q:'Which word means “very big”?',a:['Thin','Huge','Dry','Quiet'],correct:'Huge'},
- {pic:'🐟',q:'Which animal usually has fins and gills?',a:['Fish','Panda','Rabbit','Spider'],correct:'Fish'}
-];
-const mat=c=>new THREE.MeshStandardMaterial({color:c,roughness:1});
-function box(w,h,d,m,x,y,z){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;scene.add(o);return o;}
-function init3D(){
-  if(!window.THREE)throw new Error('Three.js did not load');
-  scene=new THREE.Scene();scene.background=new THREE.Color(0x9edcf0);scene.fog=new THREE.Fog(0x9edcf0,42,115);
-  camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,250);
-  renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.outputColorSpace=THREE.SRGBColorSpace;$('game').appendChild(renderer.domElement);clock=new THREE.Clock();
-  scene.add(new THREE.HemisphereLight(0xe7f9ff,0x55734c,2));const sun=new THREE.DirectionalLight(0xfff3d1,2.2);sun.position.set(-25,45,20);scene.add(sun);
-  const ground=new THREE.Mesh(new THREE.PlaneGeometry(90,90),mat(0x73bd68));ground.rotation.x=-Math.PI/2;ground.position.y=-.08;scene.add(ground);
-  const path=new THREE.Mesh(new THREE.PlaneGeometry(8,48),mat(0xd8c18b));path.rotation.x=-Math.PI/2;path.position.set(0,.005,-17);scene.add(path);
-  for(let i=0;i<36;i++){const x=(Math.random()-.5)*76,z=(Math.random()-.5)*76;if(Math.hypot(x,z)<11)continue;const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.25,.4,2,6),mat(0x93613d));trunk.position.set(x,1,z);scene.add(trunk);const crown=new THREE.Mesh(new THREE.ConeGeometry(1.5,3,6),mat([0x3f9661,0x56a96b,0x79bd72][i%3]));crown.position.set(x,3,z);scene.add(crown);}
-  const cliff=new THREE.Mesh(new THREE.ConeGeometry(9,12,5),mat(0x7c918b));cliff.position.set(0,5,-39);scene.add(cliff);box(5,5,1.5,mat(0x66727a),0,2,-34);const hole=new THREE.Mesh(new THREE.CircleGeometry(2.1,8),mat(0x263642));hole.position.set(0,2,-33.1);scene.add(hole);
-  player=new THREE.Group();player.position.set(0,0,4);scene.add(player);const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.42,.55,4,8),mat(0x347fb0));torso.position.y=1.35;player.add(torso);const head=new THREE.Mesh(new THREE.SphereGeometry(.34,10,8),mat(0xffc59d));head.position.y=2.12;player.add(head);
-  const spots=[[-5,-7],[5,-12],[-8,-19],[8,-23],[0,-28],[13,-12],[-14,-15]];
-  spots.forEach((p,i)=>{const g=new THREE.Group();g.position.set(p[0],.65,p[1]);const r=new THREE.Mesh(new THREE.DodecahedronGeometry(.9),mat([0x87979a,0x8e9da5,0x7d8d95][i%3]));g.add(r);const crystal=new THREE.Mesh(new THREE.OctahedronGeometry(.24),mat([0x66e0ce,0xffd166,0xa9a0ff][i%3]));crystal.position.y=.7;crystal.visible=false;g.add(crystal);g.userData={alive:true,crystal,index:i};scene.add(g);rocks.push(g);});
-  box(2,1.3,1.3,mat(0x9b5c30),0,.65,-36);box(2.05,.48,1.35,mat(0xd58b3c),0,1.45,-36);
-  onResize();if(!animationStarted){animationStarted=true;animate();}
-}
-function onResize(){if(!renderer)return;camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);}
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function updateHUD(){$('gems').textContent=gems;$('score').textContent=score;$('progress').textContent=answered;$('objective').textContent=answered<TOTAL?`Explore the forest and mine treasure rocks (${answered}/${TOTAL})`:'Return to the cave and unlock the final treasure!';}
-function startGame(){
-  playerName=$('playerName').value.trim()||'Explorer';playerClass=$('playerClass').value.trim()||'Year 4';
-  $('startScreen').classList.add('hidden');$('pauseScreen').classList.add('hidden');$('quizScreen').classList.add('hidden');$('endScreen').classList.add('hidden');$('hud').classList.remove('hidden');
-  running=true;paused=false;finished=false;quizOpen=false;score=0;gems=0;answered=0;correct=0;yaw=0;keys={};questionQueue=shuffle([...questions]);
-  rocks.forEach(r=>{r.visible=true;r.userData.alive=true;r.userData.crystal.visible=false;r.scale.set(1,1,1);});player.position.set(0,0,4);updateHUD();saveToSheets('English Treasure Quest','Started');
-  if(renderer.domElement.requestPointerLock)renderer.domElement.requestPointerLock();
-}
-function nearestRock(){let best=null,d=3.5;for(const r of rocks){if(!r.userData.alive)continue;const dist=player.position.distanceTo(r.position);if(dist<d){best=r;d=dist;}}return best;}
-function openQuiz(rock){
-  if(!running||paused||quizOpen||finished||!rock||!rock.userData.alive)return;
-  currentRock=rock;quizOpen=true;if(document.exitPointerLock)document.exitPointerLock();$('quizScreen').classList.remove('hidden');$('feedback').textContent='';$('quizNote').textContent='Answer correctly to break the rock and discover treasure.';
-  const q=questionQueue[answered%questionQueue.length];$('questionPicture').textContent=q.pic;$('question').textContent=q.q;$('answers').innerHTML='';
-  shuffle([...q.a]).forEach(a=>{const b=document.createElement('button');b.textContent=a;b.onclick=()=>answerQuestion(a,q,rock);$('answers').appendChild(b);});
-}
-function answerQuestion(answer,q,rock){
-  if(!quizOpen||!rock)return;const buttons=[...$('answers').querySelectorAll('button')];buttons.forEach(b=>b.disabled=true);
-  if(answer===q.correct){
-    correct++;score+=100;gems++;answered++;rock.userData.alive=false;rock.userData.crystal.visible=true;rock.visible=false;
-    saveToSheets('Treasure Challenge','In progress');$('feedback').style.color='#247c4e';$('feedback').textContent='✨ Correct! You found a gem!';$('quizNote').textContent=`+100 points · ${q.correct} is correct!`;updateHUD();
-    setTimeout(()=>{$('quizScreen').classList.add('hidden');quizOpen=false;currentRock=null;if(answered>=TOTAL){$('objective').textContent='Great work! Head to the cave to unlock the final treasure.';}if(running&&!paused&&renderer.domElement.requestPointerLock)renderer.domElement.requestPointerLock();},900);
-  }else{
-    $('feedback').style.color='#b34b36';$('feedback').textContent=`Not quite! The correct answer is ${q.correct}. Try again!`;
-    setTimeout(()=>{if(!quizOpen)return;buttons.forEach(b=>b.disabled=false);$('feedback').textContent='';},1100);
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+
+  // Google Sheets tracking URL preserved
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKV1bDYURkQfDnqb7QjPGfDvMeKrsJkUhhEtbE0lMYAt1qSE48nXw7UDf_7kg5vX4rqg/exec";
+
+  function svgUri(svg) {
+    return "data:image/svg+xml;utf8," + encodeURIComponent(svg.trim());
   }
-}
-function finishGame(){
-  if(finished||answered<TOTAL)return;finished=true;running=false;quizOpen=false;if(document.exitPointerLock)document.exitPointerLock();
-  $('hud').classList.add('hidden');$('quizScreen').classList.add('hidden');$('endScreen').classList.remove('hidden');saveToSheets('English Treasure Quest','Completed');
-  $('endGreeting').textContent=`Amazing adventure, ${playerName}${playerClass?` from ${playerClass}`:''}! You found the legendary treasure.`;
-  $('endStats').innerHTML=`💎 Gems collected: ${gems}<br>⭐ Final score: ${score}<br>📚 Questions completed: ${answered}<br>✅ Correct answers: ${correct}<br>🏅 Achievement: English Explorer`;
-}
-function resetToStart(){
-  if(document.exitPointerLock)document.exitPointerLock();$('hud').classList.add('hidden');$('quizScreen').classList.add('hidden');$('pauseScreen').classList.add('hidden');$('endScreen').classList.add('hidden');$('startScreen').classList.remove('hidden');
-  running=false;paused=false;quizOpen=false;finished=false;currentRock=null;keys={};
-}
-function animate(){
-  requestAnimationFrame(animate);if(!renderer)return;const dt=Math.min(clock.getDelta(),.04);
-  if(running&&!paused&&!quizOpen&&!finished){
-    const move=new THREE.Vector3();if(keys.KeyW||keys.ArrowUp)move.z-=1;if(keys.KeyS||keys.ArrowDown)move.z+=1;if(keys.KeyA||keys.ArrowLeft)move.x-=1;if(keys.KeyD||keys.ArrowRight)move.x+=1;
-    if(move.lengthSq()){move.normalize();player.position.addScaledVector(move,6*dt);player.position.x=THREE.MathUtils.clamp(player.position.x,-39,39);player.position.z=THREE.MathUtils.clamp(player.position.z,-42,39);}
-    const target=new THREE.Vector3(player.position.x,player.position.y+1.4,player.position.z);const distance=7;
-    const desired=new THREE.Vector3(target.x+Math.sin(yaw)*distance,target.y+3,target.z+Math.cos(yaw)*distance);
-    camera.position.lerp(desired,1-Math.pow(.001,dt));camera.lookAt(target);
-    if(player.position.distanceTo(new THREE.Vector3(0,0,-36))<5&&answered>=TOTAL)finishGame();
+
+  // =========================================================================
+  // BUILT-IN WEB AUDIO ENGINE (Rainforest Ambience + Marimba BGM + Game SFX)
+  // =========================================================================
+  const SoundEngine = (() => {
+    let ctx = null;
+    let masterGain = null;
+    let bgmGain = null;
+    let muted = false;
+    let running = false;
+    let melodyTimer = null;
+    let birdTimer = null;
+
+    // Cheerful C-major pentatonic exploration notes (Hz)
+    const NOTES = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25];
+    const PATTERN = [0, 2, 4, 5, 4, 2, 3, 1, 0, 4, 6, 5, 4, 2, 1, 2];
+    let step = 0;
+
+    function ensureContext() {
+      if (!ctx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return false;
+        ctx = new AudioCtx();
+        masterGain = ctx.createGain();
+        masterGain.gain.value = muted ? 0 : 0.85;
+        masterGain.connect(ctx.destination);
+
+        bgmGain = ctx.createGain();
+        bgmGain.gain.value = 0.35;
+        bgmGain.connect(masterGain);
+      }
+      if (ctx.state === 'suspended') ctx.resume();
+      return true;
+    }
+
+    function startWaterfallAmbience() {
+      // Soft filtered pink-style waterfall & rainforest breeze noise
+      const bufferSize = ctx.sampleRate * 3;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.997 * b0 + white * 0.029;
+        b1 = 0.985 * b1 + white * 0.032;
+        b2 = 0.950 * b2 + white * 0.048;
+        data[i] = (b0 + b1 + b2) * 0.35;
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      noise.loop = true;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 620;
+
+      const ambGain = ctx.createGain();
+      ambGain.gain.value = 0.16;
+
+      noise.connect(filter);
+      filter.connect(ambGain);
+      ambGain.connect(bgmGain);
+      noise.start();
+    }
+
+    function playMarimbaNote(freq, dur = 0.32, vol = 0.14) {
+      if (!ctx || muted) return;
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const sub = ctx.createOscillator();
+      const g = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+      sub.type = 'triangle';
+      sub.frequency.setValueAtTime(freq * 2, now);
+
+      const subGain = ctx.createGain();
+      subGain.gain.setValueAtTime(0.04, now);
+      subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.linearRampToValueAtTime(vol, now + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+
+      osc.connect(g);
+      sub.connect(subGain);
+      subGain.connect(g);
+      g.connect(bgmGain);
+
+      osc.start(now);
+      sub.start(now);
+      osc.stop(now + dur + 0.02);
+      sub.stop(now + dur + 0.02);
+    }
+
+    function playBirdChirp() {
+      if (!ctx || muted) return;
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      const base = 1150 + Math.random() * 450;
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(base, now);
+      osc.frequency.exponentialRampToValueAtTime(base * 1.32, now + 0.09);
+      osc.frequency.exponentialRampToValueAtTime(base * 1.1, now + 0.18);
+
+      g.gain.setValueAtTime(0.001, now);
+      g.gain.linearRampToValueAtTime(0.045, now + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.0008, now + 0.22);
+
+      osc.connect(g);
+      g.connect(bgmGain);
+      osc.start(now);
+      osc.stop(now + 0.24);
+    }
+
+    function startBGM() {
+      if (!ensureContext()) return;
+      if (running) return;
+      running = true;
+      startWaterfallAmbience();
+
+      melodyTimer = setInterval(() => {
+        if (!muted && ctx && ctx.state === 'running') {
+          const idx = PATTERN[step % PATTERN.length];
+          playMarimbaNote(NOTES[idx], 0.36, 0.13);
+          if (step % 4 === 0) playMarimbaNote(NOTES[0] / 2, 0.55, 0.09);
+          step++;
+        }
+      }, 420);
+
+      birdTimer = setInterval(() => {
+        if (!muted && ctx && ctx.state === 'running' && Math.random() < 0.65) {
+          playBirdChirp();
+          if (Math.random() < 0.5) setTimeout(playBirdChirp, 210);
+        }
+      }, 3600);
+    }
+
+    function sfxTone(freqs, stepMs = 85, type = 'triangle', vol = 0.18) {
+      if (!ensureContext() || muted) return;
+      freqs.forEach((f, i) => {
+        setTimeout(() => {
+          const now = ctx.currentTime;
+          const osc = ctx.createOscillator();
+          const g = ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(f, now);
+          g.gain.setValueAtTime(0.001, now);
+          g.gain.linearRampToValueAtTime(vol, now + 0.012);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.connect(g);
+          g.connect(masterGain);
+          osc.start(now);
+          osc.stop(now + 0.24);
+        }, i * stepMs);
+      });
+    }
+
+    return {
+      startBGM,
+      toggleMute() {
+        ensureContext();
+        muted = !muted;
+        if (masterGain && ctx) {
+          masterGain.gain.setTargetAtTime(muted ? 0 : 0.85, ctx.currentTime, 0.04);
+        }
+        return muted;
+      },
+      isMuted: () => muted,
+      click: () => sfxTone([523.25], 60, 'sine', 0.14),
+      pickup: () => sfxTone([392, 523.25], 70, 'triangle', 0.16),
+      gem: () => sfxTone([659.25, 880], 75, 'sine', 0.16),
+      correct: () => sfxTone([523.25, 659.25, 783.99, 1046.5], 80, 'triangle', 0.2),
+      wrong: () => sfxTone([240, 196], 110, 'sine', 0.16),
+      victory: () => sfxTone([523.25, 659.25, 783.99, 659.25, 1046.5], 110, 'triangle', 0.22)
+    };
+  })();
+
+  // =========================================================================
+  // RAINFOREST WATERFALL & ANCIENT TEMPLE RUINS BACKGROUND (THROUGHOUT GAME)
+  // =========================================================================
+  function buildJungleSceneCanvas() {
+    const c = document.createElement('canvas');
+    c.width = 1280;
+    c.height = 720;
+    const ctx = c.getContext('2d');
+
+    const sky = ctx.createLinearGradient(0, 0, 0, 720);
+    sky.addColorStop(0, '#c7f9cc');
+    sky.addColorStop(0.36, '#74c69d');
+    sky.addColorStop(0.72, '#2d6a4f');
+    sky.addColorStop(1, '#1b4332');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, 1280, 720);
+
+    // Sunbeams filtering through canopy
+    for (let i = 0; i < 5; i++) {
+      const g = ctx.createLinearGradient(180 + i * 190, 0, 420 + i * 200, 650);
+      g.addColorStop(0, 'rgba(255, 250, 205, 0.32)');
+      g.addColorStop(1, 'rgba(255, 250, 205, 0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.moveTo(150 + i * 190, 0);
+      ctx.lineTo(265 + i * 190, 0);
+      ctx.lineTo(510 + i * 195, 700);
+      ctx.lineTo(340 + i * 195, 700);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // Distant jungle hills
+    ctx.fillStyle = '#52b788';
+    ctx.beginPath();
+    ctx.moveTo(0, 410);
+    ctx.quadraticCurveTo(240, 220, 500, 350);
+    ctx.quadraticCurveTo(780, 180, 1040, 340);
+    ctx.quadraticCurveTo(1180, 250, 1280, 350);
+    ctx.lineTo(1280, 720);
+    ctx.lineTo(0, 720);
+    ctx.closePath();
+    ctx.fill();
+
+    // Mossy stone temple archway & ruins
+    ctx.fillStyle = '#8d99ae';
+    ctx.fillRect(210, 210, 180, 155);
+    ctx.fillStyle = '#6c757d';
+    ctx.fillRect(194, 192, 212, 24);
+    ctx.fillRect(228, 170, 144, 22);
+    ctx.fillStyle = '#1b4332';
+    ctx.beginPath();
+    ctx.arc(300, 365, 46, Math.PI, 0);
+    ctx.fill();
+
+    // Cascading turquoise waterfall
+    const wf = ctx.createLinearGradient(960, 210, 960, 520);
+    wf.addColorStop(0, '#e0fbfc');
+    wf.addColorStop(0.45, '#72efdd');
+    wf.addColorStop(1, '#00b4d8');
+    ctx.fillStyle = wf;
+    ctx.beginPath();
+    ctx.moveTo(915, 220);
+    ctx.quadraticCurveTo(975, 215, 1020, 225);
+    ctx.quadraticCurveTo(1050, 380, 1065, 520);
+    ctx.lineTo(890, 520);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = '#48cae4';
+    ctx.beginPath();
+    ctx.ellipse(955, 545, 215, 48, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Rainforest clearing floor
+    const floorGrad = ctx.createLinearGradient(0, 360, 0, 720);
+    floorGrad.addColorStop(0, 'rgba(64, 145, 108, 0.88)');
+    floorGrad.addColorStop(1, 'rgba(45, 106, 79, 0.95)');
+    ctx.fillStyle = floorGrad;
+    ctx.fillRect(0, 365, 1280, 355);
+
+    ctx.fillStyle = 'rgba(221, 184, 146, 0.55)';
+    ctx.beginPath();
+    ctx.ellipse(640, 540, 440, 145, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Framing jungle trees & canopy leaves
+    ctx.fillStyle = '#4a2c11';
+    ctx.fillRect(0, 0, 52, 720);
+    ctx.fillRect(1228, 0, 52, 720);
+    const greens = ['#1b4332', '#2d6a4f', '#40916c', '#52b788'];
+    for (let i = 0; i < 18; i++) {
+      ctx.fillStyle = greens[i % greens.length];
+      ctx.beginPath();
+      ctx.arc(i * 78, 18 + (i % 3) * 14, 60, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    return c;
   }
-  renderer.render(scene,camera);
-}
-$('startBtn').addEventListener('click',()=>{if(!scene){try{init3D();}catch(e){console.error(e);alert('The 3D engine could not load. Check your internet connection and reopen the game.');return;}}startGame();});
-$('resumeBtn').onclick=()=>{paused=false;$('pauseScreen').classList.add('hidden');if(running&&!quizOpen&&renderer.domElement.requestPointerLock)renderer.domElement.requestPointerLock();};
-$('restartBtn').onclick=resetToStart;$('playAgainBtn').onclick=resetToStart;
-document.addEventListener('keydown',e=>{
-  keys[e.code]=true;
-  if(e.code==='Escape'&&running&&!quizOpen&&!finished){paused=!paused;$('pauseScreen').classList.toggle('hidden',!paused);if(document.exitPointerLock)document.exitPointerLock();}
-  if((e.code==='KeyE'||e.code==='Enter')&&!quizOpen&&running&&!paused){if(player&&player.position.distanceTo(new THREE.Vector3(0,0,-36))<5&&answered>=TOTAL)finishGame();else openQuiz(nearestRock());}
-});
-document.addEventListener('keyup',e=>{keys[e.code]=false;});
-document.addEventListener('mousemove',e=>{if(renderer&&document.pointerLockElement===renderer.domElement&&running&&!paused&&!quizOpen){yaw-=e.movementX*.002;}});
-document.addEventListener('click',e=>{
-  if(!renderer||!running||paused||quizOpen||finished||e.target.closest('button,input,.panel'))return;
-  if(document.pointerLockElement!==renderer.domElement){if(renderer.domElement.requestPointerLock)renderer.domElement.requestPointerLock();return;}
-  const rock=nearestRock();if(rock)openQuiz(rock);
-});
-window.addEventListener('resize',onResize);
+
+  const bgSceneCanvas = buildJungleSceneCanvas();
+  const bgDataUrl = bgSceneCanvas.toDataURL('image/jpeg', 0.9);
+  document.documentElement.style.setProperty('--jungle-bg', `url("${bgDataUrl}")`);
+
+  // =========================================================================
+  // ILLUSTRATED SVG SPRITES & ICONS (ZERO EMOJIS)
+  // =========================================================================
+  const SVGS = {
+    gem: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><polygon points="18,10 46,10 58,26 32,56 6,26" fill="#29b6f6" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><polygon points="18,10 32,26 46,10" fill="#b3e5fc"/><polygon points="22,15 28,15 24,22" fill="#fff"/></svg>`,
+    compass: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="27" fill="#f5b041" stroke="#fff" stroke-width="3"/><circle cx="32" cy="32" r="20" fill="#fef9e7"/><polygon points="32,14 38,32 26,32" fill="#e74c3c"/><polygon points="32,50 38,32 26,32" fill="#5d6d7e"/></svg>`,
+    star: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><polygon points="32,6 40,22 58,25 45,38 48,56 32,47 16,56 19,38 6,25 24,22" fill="#ffd166" stroke="#fff" stroke-width="3" stroke-linejoin="round"/></svg>`,
+    mapIcon: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><polygon points="8,14 24,8 40,14 56,8 56,50 40,56 24,50 8,56" fill="#fae588" stroke="#8d5524" stroke-width="3" stroke-linejoin="round"/><path d="M16,36 Q26,22 36,32 T49,22" fill="none" stroke="#c0392b" stroke-width="3.5" stroke-dasharray="4 3" stroke-linecap="round"/></svg>`,
+    check: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="28" fill="#2ecc71" stroke="#fff" stroke-width="4"/><polyline points="18,33 28,43 46,22" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    trophy: `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><path d="M22,18 H58 V34 C58,47 48,54 40,54 C32,54 22,47 22,34 Z" fill="#ffd166" stroke="#b7791f" stroke-width="3"/><path d="M22,22 H12 C12,34 17,40 23,40" fill="none" stroke="#f6ad55" stroke-width="5"/><path d="M58,22 H68 C68,34 63,40 57,40" fill="none" stroke="#f6ad55" stroke-width="5"/><rect x="35" y="54" width="10" height="10" fill="#ecc94b"/><rect x="24" y="64" width="32" height="8" rx="3" fill="#975a16"/></svg>`,
+    medal: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><polygon points="20,6 32,26 44,6" fill="#e74c3c"/><circle cx="32" cy="40" r="17" fill="#ffd166" stroke="#d68910" stroke-width="3"/><polygon points="32,29 35,36 43,37 37,42 39,49 32,45 25,49 27,42 21,37 29,36" fill="#fff8e1"/></svg>`,
+    play: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><polygon points="8,5 27,16 8,27" fill="#ffffff"/></svg>`,
+    restart: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M25,16 A9,9 0 1,1 22,9" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/><polygon points="23,3 26,12 17,11" fill="#ffffff"/></svg>`,
+    chest: `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="26" width="44" height="28" rx="4" fill="#ffd166" stroke="#582f0e" stroke-width="3"/><path d="M8,28 Q32,10 56,28 Z" fill="#ff9f1c" stroke="#582f0e" stroke-width="3"/><rect x="28" y="24" width="8" height="11" rx="2" fill="#ffffff" stroke="#582f0e" stroke-width="2"/></svg>`,
+    soundOn: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><polygon points="4,12 11,12 18,6 18,26 11,20 4,20" fill="#ffffff"/><path d="M22,11 Q26,16 22,21" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/><path d="M25,7 Q31,16 25,25" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/></svg>`,
+    soundOff: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><polygon points="4,12 11,12 18,6 18,26 11,20 4,20" fill="#ffffff"/><line x1="22" y1="11" x2="29" y2="21" stroke="#ffb3c1" stroke-width="3" stroke-linecap="round"/><line x1="29" y1="11" x2="22" y2="21" stroke="#ffb3c1" stroke-width="3" stroke-linecap="round"/></svg>`,
+    arrUp: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><polygon points="16,5 28,24 4,24" fill="#1f6f48"/></svg>`,
+    arrDown: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><polygon points="16,27 28,8 4,8" fill="#1f6f48"/></svg>`,
+    arrLeft: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><polygon points="5,16 24,4 24,28" fill="#1f6f48"/></svg>`,
+    arrRight: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><polygon points="27,16 8,4 8,28" fill="#1f6f48"/></svg>`,
+
+    startBanner: `<svg viewBox="0 0 560 175" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#95d5b2"/><stop offset="100%" stop-color="#1b4332"/></linearGradient></defs><rect width="560" height="175" fill="url(#g)"/><rect x="215" y="42" width="130" height="92" rx="6" fill="#8d99ae" stroke="#5c677d" stroke-width="3"/><rect x="200" y="30" width="160" height="18" rx="4" fill="#6c757d"/><circle cx="280" cy="134" r="34" fill="#14213d"/><path d="M0,130 Q140,95 280,130 T560,122 L560,175 L0,175 Z" fill="#2d6a4f"/><path d="M250,175 L264,134 L296,134 L310,175 Z" fill="#e9c46a"/><rect x="430" y="38" width="56" height="100" fill="#48cae4"/><ellipse cx="458" cy="142" rx="68" ry="16" fill="#00b4d8"/><circle cx="55" cy="24" r="42" fill="#40916c"/><circle cx="505" cy="24" r="44" fill="#40916c"/></svg>`,
+    endBanner: `<svg viewBox="0 0 560 175" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="175" fill="#1b4332"/><rect x="390" y="0" width="85" height="145" fill="#48cae4"/><ellipse cx="425" cy="150" rx="105" ry="20" fill="#00b4d8"/><circle cx="260" cy="92" r="65" fill="#ffd166" opacity="0.3"/><rect x="205" y="82" width="110" height="62" rx="8" fill="#9c6644" stroke="#582f0e" stroke-width="4"/><path d="M200,84 Q260,44 320,84 Z" fill="#e09f3e" stroke="#582f0e" stroke-width="4"/><rect x="250" y="76" width="20" height="24" rx="4" fill="#ffd166" stroke="#582f0e" stroke-width="3"/></svg>`,
+
+    explorer: `<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg"><ellipse cx="45" cy="80" rx="20" ry="7" fill="rgba(0,0,0,0.22)"/><rect x="33" y="60" width="9" height="17" rx="4" fill="#5c4033"/><rect x="48" y="60" width="9" height="17" rx="4" fill="#5c4033"/><rect x="29" y="38" width="32" height="26" rx="9" fill="#e76f51" stroke="#fff" stroke-width="2"/><circle cx="45" cy="26" r="15" fill="#ffd6a5" stroke="#8d5524" stroke-width="2"/><circle cx="40" cy="25" r="2.3" fill="#1d3557"/><circle cx="50" cy="25" r="2.3" fill="#1d3557"/><path d="M41,31 Q45,35 49,31" fill="none" stroke="#8d5524" stroke-width="2" stroke-linecap="round"/><ellipse cx="45" cy="14" rx="22" ry="6" fill="#d4a373" stroke="#7f4f24" stroke-width="2"/><path d="M31,14 Q45,2 59,14 Z" fill="#e9c46a" stroke="#7f4f24" stroke-width="2"/></svg>`,
+    crate: `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="14" width="60" height="54" rx="9" fill="#e09f3e" stroke="#7f4f24" stroke-width="3.5"/><line x1="10" y1="32" x2="70" y2="32" stroke="#9c6644" stroke-width="3"/><line x1="10" y1="50" x2="70" y2="50" stroke="#9c6644" stroke-width="3"/><line x1="16" y1="20" x2="64" y2="62" stroke="#f4a261" stroke-width="4"/></svg>`,
+
+    // 10 Year 4 Animals (Get Smart Plus 4 — Module 8 Amazing Animals)
+    panda: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="28" cy="24" r="11" fill="#212529"/><circle cx="72" cy="24" r="11" fill="#212529"/><ellipse cx="50" cy="72" rx="28" ry="22" fill="#212529"/><ellipse cx="50" cy="75" rx="18" ry="15" fill="#fff"/><circle cx="50" cy="44" r="25" fill="#fff" stroke="#212529" stroke-width="3"/><ellipse cx="39" cy="42" rx="7" ry="9" transform="rotate(-14 39 42)" fill="#212529"/><ellipse cx="61" cy="42" rx="7" ry="9" transform="rotate(14 61 42)" fill="#212529"/><circle cx="40" cy="41" r="2.8" fill="#fff"/><circle cx="60" cy="41" r="2.8" fill="#fff"/><ellipse cx="50" cy="50" rx="5" ry="3.5" fill="#212529"/></svg>`,
+    cheetah: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="52" cy="64" rx="28" ry="17" fill="#f4a261" stroke="#9c4127" stroke-width="2.5"/><path d="M78,62 Q94,50 90,36" fill="none" stroke="#f4a261" stroke-width="6" stroke-linecap="round"/><rect x="30" y="74" width="7" height="18" rx="3" fill="#f4a261" stroke="#9c4127" stroke-width="2"/><rect x="64" y="74" width="7" height="18" rx="3" fill="#f4a261" stroke="#9c4127" stroke-width="2"/><circle cx="30" cy="42" r="17" fill="#ffb703" stroke="#9c4127" stroke-width="2.5"/><circle cx="19" cy="29" r="6" fill="#ffb703" stroke="#9c4127" stroke-width="2"/><circle cx="41" cy="29" r="6" fill="#ffb703" stroke="#9c4127" stroke-width="2"/><circle cx="25" cy="40" r="2.6" fill="#000"/><circle cx="35" cy="40" r="2.6" fill="#000"/><circle cx="48" cy="58" r="3" fill="#212529"/><circle cx="58" cy="64" r="3" fill="#212529"/><circle cx="44" cy="68" r="2.8" fill="#212529"/><circle cx="64" cy="56" r="2.8" fill="#212529"/></svg>`,
+    ostrich: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><line x1="45" y1="66" x2="42" y2="94" stroke="#f4a261" stroke-width="4.5" stroke-linecap="round"/><line x1="57" y1="66" x2="60" y2="94" stroke="#f4a261" stroke-width="4.5" stroke-linecap="round"/><ellipse cx="54" cy="56" rx="24" ry="17" fill="#2b2d42" stroke="#fff" stroke-width="2"/><path d="M68,48 Q82,52 76,64" fill="#fff"/><path d="M36,48 Q32,26 36,18" fill="none" stroke="#f4a261" stroke-width="7" stroke-linecap="round"/><circle cx="35" cy="17" r="9" fill="#f4a261"/><polygon points="26,17 15,20 26,22" fill="#ffb703"/><circle cx="33" cy="15" r="2.3" fill="#000"/></svg>`,
+    gorilla: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="62" rx="30" ry="26" fill="#343a40" stroke="#212529" stroke-width="2.5"/><ellipse cx="50" cy="66" rx="18" ry="16" fill="#6c757d"/><circle cx="50" cy="32" r="20" fill="#343a40" stroke="#212529" stroke-width="2.5"/><ellipse cx="50" cy="35" rx="13" ry="11" fill="#6c757d"/><circle cx="44" cy="31" r="2.6" fill="#fff"/><circle cx="56" cy="31" r="2.6" fill="#fff"/><circle cx="44" cy="31" r="1.3" fill="#000"/><circle cx="56" cy="31" r="1.3" fill="#000"/><ellipse cx="50" cy="39" rx="5" ry="3" fill="#212529"/></svg>`,
+    rhino: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="56" cy="58" rx="30" ry="21" fill="#8d99ae" stroke="#495057" stroke-width="2.5"/><rect x="36" y="72" width="9" height="18" rx="3" fill="#8d99ae" stroke="#495057" stroke-width="2"/><rect x="66" y="72" width="9" height="18" rx="3" fill="#8d99ae" stroke="#495057" stroke-width="2"/><ellipse cx="28" cy="52" rx="17" ry="14" fill="#8d99ae" stroke="#495057" stroke-width="2.5"/><polygon points="13,48 5,32 21,44" fill="#faedcd" stroke="#495057" stroke-width="2"/><circle cx="26" cy="48" r="2.6" fill="#000"/></svg>`,
+    elephant: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="56" cy="58" rx="28" ry="22" fill="#90a4ae" stroke="#455a64" stroke-width="2.5"/><rect x="38" y="72" width="9" height="18" rx="3" fill="#90a4ae" stroke="#455a64" stroke-width="2"/><rect x="64" y="72" width="9" height="18" rx="3" fill="#90a4ae" stroke="#455a64" stroke-width="2"/><ellipse cx="44" cy="44" rx="12" ry="16" fill="#b0bec5" stroke="#455a64" stroke-width="2"/><circle cx="30" cy="46" r="16" fill="#90a4ae" stroke="#455a64" stroke-width="2.5"/><path d="M18,48 C8,52 10,74 20,72" fill="none" stroke="#90a4ae" stroke-width="8" stroke-linecap="round"/><path d="M22,56 Q12,60 10,53" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><circle cx="26" cy="42" r="2.6" fill="#000"/></svg>`,
+    tortoise: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="70" width="9" height="14" rx="4" fill="#74c69d" stroke="#2d6a4f" stroke-width="2"/><rect x="62" y="70" width="9" height="14" rx="4" fill="#74c69d" stroke="#2d6a4f" stroke-width="2"/><path d="M22,68 C22,34 78,34 78,68 Z" fill="#bc6c25" stroke="#582f0e" stroke-width="3"/><circle cx="50" cy="52" r="8" fill="#dda15e"/><circle cx="35" cy="58" r="6" fill="#dda15e"/><circle cx="65" cy="58" r="6" fill="#dda15e"/><circle cx="18" cy="58" r="10" fill="#74c69d" stroke="#2d6a4f" stroke-width="2.5"/><circle cx="15" cy="56" r="2.2" fill="#000"/></svg>`,
+    camel: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><line x1="38" y1="68" x2="38" y2="92" stroke="#d4a373" stroke-width="5" stroke-linecap="round"/><line x1="66" y1="68" x2="66" y2="92" stroke="#d4a373" stroke-width="5" stroke-linecap="round"/><path d="M30,62 C32,36 48,36 50,54 C54,36 70,36 74,62 Z" fill="#dda15e" stroke="#8d5524" stroke-width="2.5"/><ellipse cx="52" cy="62" rx="25" ry="13" fill="#dda15e" stroke="#8d5524" stroke-width="2.5"/><path d="M30,58 Q20,52 22,32" fill="none" stroke="#dda15e" stroke-width="9" stroke-linecap="round"/><ellipse cx="19" cy="29" rx="11" ry="7" fill="#dda15e" stroke="#8d5524" stroke-width="2"/><circle cx="17" cy="27" r="2.2" fill="#000"/></svg>`,
+    crocodile: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="56" cy="60" rx="32" ry="13" fill="#52b788" stroke="#1b4332" stroke-width="2.5"/><ellipse cx="24" cy="58" rx="18" ry="9" fill="#52b788" stroke="#1b4332" stroke-width="2.5"/><polyline points="10,60 15,64 20,60 25,64 30,60" fill="none" stroke="#fff" stroke-width="2.5"/><circle cx="28" cy="51" r="4" fill="#ffd166" stroke="#1b4332" stroke-width="1.5"/><circle cx="28" cy="51" r="1.8" fill="#000"/><polygon points="48,47 53,40 58,47 63,40 68,47" fill="#2d6a4f"/></svg>`,
+    dolphin: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M18,62 C26,28 68,22 84,54 C88,62 94,64 96,58 C92,68 90,74 95,80 C85,76 78,70 74,64 C58,48 36,52 26,68 Z" fill="#48cae4" stroke="#023e8a" stroke-width="2.5" stroke-linejoin="round"/><path d="M52,32 L60,18 L66,35 Z" fill="#0096c7" stroke="#023e8a" stroke-width="2"/><circle cx="29" cy="52" r="2.6" fill="#03045e"/></svg>`
+  };
+
+  const IMG_URI = {};
+  const IMG_OBJ = {};
+  Object.keys(SVGS).forEach(k => {
+    IMG_URI[k] = svgUri(SVGS[k]);
+    const im = new Image();
+    im.src = IMG_URI[k];
+    IMG_OBJ[k] = im;
+  });
+
+  // Bind UI icons
+  $('startBannerImg').src = IMG_URI.startBanner;
+  $('startPlayIcon').src = IMG_URI.play;
+  $('mapExplorerIcon').src = IMG_URI.compass;
+  $('mapGemIcon').src = IMG_URI.gem;
+  $('mapStarIcon').src = IMG_URI.star;
+  $('mapSoundIcon').src = IMG_URI.soundOn;
+  $('hudSoundIcon').src = IMG_URI.soundOn;
+  $('checkS1').src = IMG_URI.check;
+  $('checkS2').src = IMG_URI.check;
+  $('checkS3').src = IMG_URI.check;
+  $('treasureOrbIcon').src = IMG_URI.chest;
+  $('hudMapIcon').src = IMG_URI.mapIcon;
+  $('hudCompassIcon').src = IMG_URI.compass;
+  $('hudGemIcon').src = IMG_URI.gem;
+  $('hudStarIcon').src = IMG_URI.star;
+  $('arrUp').src = IMG_URI.arrUp;
+  $('arrDown').src = IMG_URI.arrDown;
+  $('arrLeft').src = IMG_URI.arrLeft;
+  $('arrRight').src = IMG_URI.arrRight;
+  $('endBannerImg').src = IMG_URI.endBanner;
+  $('endTrophyIcon').src = IMG_URI.trophy;
+  $('endMapIcon').src = IMG_URI.mapIcon;
+  $('endRestartIcon').src = IMG_URI.restart;
+
+  function syncSoundButtons() {
+    const muted = SoundEngine.isMuted();
+    const icon = muted ? IMG_URI.soundOff : IMG_URI.soundOn;
+    const text = muted ? 'Sound: OFF' : 'Sound: ON';
+    $('mapSoundIcon').src = icon;
+    $('hudSoundIcon').src = icon;
+    $('mapSoundLabel').textContent = text;
+    $('hudSoundLabel').textContent = text;
+    $('mapSoundBtn').classList.toggle('muted', muted);
+    $('hudSoundBtn').classList.toggle('muted', muted);
+  }
+
+  $('mapSoundBtn').onclick = () => { SoundEngine.toggleMute(); syncSoundButtons(); };
+  $('hudSoundBtn').onclick = () => { SoundEngine.toggleMute(); syncSoundButtons(); };
+
+  // Player & Progress State
+  let playerName = 'Explorer', playerClass = 'Year 4';
+  let score = 0, gems = 0, totalMatches = 0;
+  const stationDone = { 1: false, 2: false, 3: false };
+
+  function saveToSheets(activity, status) {
+    const completedCount = Number(stationDone[1]) + Number(stationDone[2]) + Number(stationDone[3]);
+    const data = new URLSearchParams({
+      name: playerName,
+      studentClass: playerClass,
+      activity,
+      score: String(score),
+      correctAnswers: String(totalMatches),
+      questionsCompleted: String(completedCount),
+      gems: String(gems),
+      status
+    });
+    return fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: data })
+      .catch(err => console.error('Could not submit game record:', err));
+  }
+
+  const canvas = $('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = 1000, H = 620;
+  let activeStation = 0;
+  let keys = {}, dpadState = { up: false, down: false, left: false, right: false };
+  let pointerTarget = null;
+  let toastTimer = null;
+  let cooldown = 0;
+
+  const explorer = { x: 500, y: 470, r: 24, speed: 245, bob: 0 };
+
+  function showToast(msg, isGood = true) {
+    const el = $('toastMsg');
+    el.textContent = msg;
+    el.style.background = isGood ? 'rgba(25, 105, 65, 0.96)' : 'rgba(168, 62, 43, 0.95)';
+    el.classList.remove('hidden');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.add('hidden'), 1900);
+  }
+
+  function updateHUD(label, progText, word, clue) {
+    $('gemsText').textContent = gems;
+    $('scoreText').textContent = score;
+    if (label !== undefined) $('stationLabel').textContent = label;
+    if (progText !== undefined) $('stationProgress').textContent = progText;
+    if (word !== undefined) $('promptWord').textContent = word;
+    if (clue !== undefined) $('promptClue').textContent = clue;
+  }
+
+  function refreshMapUI() {
+    $('explorerTag').textContent = `${playerName} (${playerClass})`;
+    $('mapGemsText').textContent = gems;
+    $('mapScoreText').textContent = score;
+    const cleared = Number(stationDone[1]) + Number(stationDone[2]) + Number(stationDone[3]);
+    $('stationsClearedText').textContent = cleared;
+
+    [1, 2, 3].forEach(n => {
+      $('checkS' + n).classList.toggle('hidden', !stationDone[n]);
+    });
+
+    const claimBtn = $('claimTreasureBtn');
+    if (cleared === 3) {
+      claimBtn.disabled = false;
+      $('treasureOrbIcon').src = IMG_URI.trophy;
+      $('treasureBannerText').textContent = 'OPEN CORAL TREASURE!';
+    } else {
+      claimBtn.disabled = true;
+      $('treasureOrbIcon').src = IMG_URI.chest;
+      $('treasureBannerText').textContent = `CORAL TREASURE (${cleared}/3)`;
+    }
+  }
+
+  function openMapScreen() {
+    activeStation = 0;
+    pointerTarget = null;
+    $('hud').classList.add('hidden');
+    $('startScreen').classList.add('hidden');
+    $('endScreen').classList.add('hidden');
+    refreshMapUI();
+    $('mapScreen').classList.remove('hidden');
+  }
+
+  // =========================================================================
+  // STATION 1: ORCHID HAVEN — JUNGLE WALK & MATCH
+  // =========================================================================
+  const s1Pool = [
+    { id: 'cheetah', word: 'CHEETAH', clue: 'Walk to the fastest land animal with black spots!' },
+    { id: 'ostrich', word: 'OSTRICH', clue: 'Walk to the tall bird with long legs that cannot fly!' },
+    { id: 'panda', word: 'PANDA', clue: 'Walk to the black-and-white bear that loves bamboo!' },
+    { id: 'rhino', word: 'RHINO', clue: 'Walk to the strong grey animal with a horn on its nose!' },
+    { id: 'camel', word: 'CAMEL', clue: 'Walk to the desert animal with two humps on its back!' }
+  ];
+  let s1Step = 0, s1Targets = [], s1Animals = [];
+
+  function startStation1() {
+    SoundEngine.click();
+    activeStation = 1;
+    $('mapScreen').classList.add('hidden');
+    $('hud').classList.remove('hidden');
+    s1Step = 0;
+    s1Targets = [...s1Pool].sort(() => Math.random() - 0.5).slice(0, 4);
+    explorer.x = 500; explorer.y = 520; pointerTarget = null;
+    spawnS1Round();
+  }
+
+  function spawnS1Round() {
+    const spots = [
+      { x: 200, y: 250, vx: 38, vy: 24 },
+      { x: 800, y: 250, vx: -36, vy: 28 },
+      { x: 230, y: 430, vx: 32, vy: -26 },
+      { x: 780, y: 430, vx: -34, vy: -24 },
+      { x: 500, y: 235, vx: 30, vy: 20 }
+    ];
+    s1Animals = s1Pool.map((item, idx) => ({
+      ...item,
+      x: spots[idx].x,
+      y: spots[idx].y,
+      vx: spots[idx].vx,
+      vy: spots[idx].vy,
+      r: 36
+    }));
+    const cur = s1Targets[s1Step];
+    updateHUD('Orchid Haven', `${s1Step}/4`, `FIND: ${cur.word}`, cur.clue);
+  }
+
+  // =========================================================================
+  // STATION 2: HIDDEN FALLS — MAYA TEMPLE MAZE
+  // =========================================================================
+  const mazeStages = [
+    { id: 'gorilla', word: 'GORILLA', clue: 'Explore the Maya Ruins maze to find the strong rainforest ape!', decoys: ['camel', 'ostrich'] },
+    { id: 'tortoise', word: 'TORTOISE', clue: 'Navigate the stone corridors to find the slow animal with a hard shell!', decoys: ['rhino', 'cheetah'] },
+    { id: 'elephant', word: 'ELEPHANT', clue: 'Find the huge grey animal with large ears and a long trunk!', decoys: ['crocodile', 'panda'] }
+  ];
+  const MAZE_GRID = [
+    "111111111111111",
+    "100010000010001",
+    "101010111010101",
+    "101000001000101",
+    "101111101110101",
+    "100000100000001",
+    "101110111011101",
+    "100010000010001",
+    "111111111111111"
+  ];
+  const TILE = 54, MX = 95, MY = 116;
+  let s2Stage = 0, s2Walls = [], s2Animals = [], s2Gems = [];
+
+  function startStation2() {
+    SoundEngine.click();
+    activeStation = 2;
+    $('mapScreen').classList.add('hidden');
+    $('hud').classList.remove('hidden');
+    s2Stage = 0;
+    s2Walls = [];
+    for (let r = 0; r < MAZE_GRID.length; r++) {
+      for (let c = 0; c < MAZE_GRID[r].length; c++) {
+        if (MAZE_GRID[r][c] === '1') {
+          s2Walls.push({ x: MX + c * TILE, y: MY + r * TILE, w: TILE, h: TILE });
+        }
+      }
+    }
+    spawnS2Stage();
+  }
+
+  function cellCenter(col, row) {
+    return { x: MX + col * TILE + TILE / 2, y: MY + row * TILE + TILE / 2 };
+  }
+
+  function spawnS2Stage() {
+    const startPos = cellCenter(1, 7);
+    explorer.x = startPos.x; explorer.y = startPos.y;
+    pointerTarget = null;
+
+    const chambers = [cellCenter(13, 1), cellCenter(13, 7), cellCenter(7, 1)].sort(() => Math.random() - 0.5);
+    const st = mazeStages[s2Stage];
+    s2Animals = [
+      { id: st.id, name: st.word, correct: true, x: chambers[0].x, y: chambers[0].y, r: 22 },
+      { id: st.decoys[0], name: st.decoys[0].toUpperCase(), correct: false, x: chambers[1].x, y: chambers[1].y, r: 22 },
+      { id: st.decoys[1], name: st.decoys[1].toUpperCase(), correct: false, x: chambers[2].x, y: chambers[2].y, r: 22 }
+    ];
+
+    s2Gems = [cellCenter(3, 1), cellCenter(7, 5), cellCenter(11, 3), cellCenter(5, 7)].map(p => ({
+      x: p.x, y: p.y, taken: false
+    }));
+
+    updateHUD('Hidden Falls Maze', `${s2Stage}/3`, `MAZE QUEST: ${st.word}`, st.clue);
+  }
+
+  // =========================================================================
+  // STATION 3: EAGLE'S SUMMIT & LAGOON — ANIMAL CLUE RESCUE
+  // =========================================================================
+  const s3Data = [
+    { id: 'panda', label: 'PANDA', clueText: 'Eats green bamboo', x: 185, y: 235 },
+    { id: 'crocodile', label: 'CROCODILE', clueText: 'Scaly swimmer with sharp teeth', x: 815, y: 235 },
+    { id: 'dolphin', label: 'DOLPHIN', clueText: 'Clever sea mammal that leaps', x: 815, y: 485 },
+    { id: 'camel', label: 'CAMEL', clueText: 'Has humps for the hot desert', x: 185, y: 485 }
+  ];
+  let s3Crates = [], s3Animals = [], carriedCrate = null, s3DoneCount = 0;
+
+  function startStation3() {
+    SoundEngine.click();
+    activeStation = 3;
+    $('mapScreen').classList.add('hidden');
+    $('hud').classList.remove('hidden');
+    explorer.x = 500; explorer.y = 360; pointerTarget = null;
+    carriedCrate = null; s3DoneCount = 0;
+
+    s3Animals = s3Data.map(a => ({ ...a, matched: false, r: 38 }));
+    const crateSpots = [
+      { x: 420, y: 255 }, { x: 580, y: 255 },
+      { x: 420, y: 455 }, { x: 580, y: 455 }
+    ].sort(() => Math.random() - 0.5);
+
+    s3Crates = s3Data.map((a, i) => ({
+      id: a.id,
+      clueText: a.clueText,
+      x: crateSpots[i].x,
+      y: crateSpots[i].y,
+      delivered: false
+    }));
+
+    updateHUD(
+      "Eagle's Summit",
+      '0/4',
+      'PICK UP A CLUE CRATE',
+      'Walk onto any wooden crate in the centre, then carry it to the matching animal!'
+    );
+  }
+
+  function completeCurrentStation(num, title) {
+    stationDone[num] = true;
+    score += 150;
+    gems += 2;
+    SoundEngine.victory();
+    saveToSheets(title, `Station ${num} Completed`);
+    showToast(`${title} Cleared! Returning to Expedition Map...`, true);
+    setTimeout(() => {
+      openMapScreen();
+    }, 1350);
+  }
+
+  function resolveCircleRect(cx, cy, cr, rect) {
+    const nearestX = Math.max(rect.x, Math.min(cx, rect.x + rect.w));
+    const nearestY = Math.max(rect.y, Math.min(cy, rect.y + rect.h));
+    const dx = cx - nearestX, dy = cy - nearestY;
+    const distSq = dx * dx + dy * dy;
+    if (distSq < cr * cr && distSq > 0.0001) {
+      const dist = Math.sqrt(distSq);
+      const overlap = cr - dist;
+      return { x: cx + (dx / dist) * overlap, y: cy + (dy / dist) * overlap };
+    }
+    return { x: cx, y: cy };
+  }
+
+  // Main Game Loop
+  let lastTime = performance.now();
+  function gameLoop(now) {
+    requestAnimationFrame(gameLoop);
+    const dt = Math.min((now - lastTime) / 1000, 0.05);
+    lastTime = now;
+    if (cooldown > 0) cooldown -= dt;
+
+    if (activeStation === 0) return;
+
+    let vx = 0, vy = 0;
+    if (keys.ArrowUp || keys.KeyW || dpadState.up) vy -= 1;
+    if (keys.ArrowDown || keys.KeyS || dpadState.down) vy += 1;
+    if (keys.ArrowLeft || keys.KeyA || dpadState.left) vx -= 1;
+    if (keys.ArrowRight || keys.KeyD || dpadState.right) vx += 1;
+
+    if (vx !== 0 || vy !== 0) {
+      pointerTarget = null;
+      const len = Math.hypot(vx, vy);
+      vx /= len; vy /= len;
+    } else if (pointerTarget) {
+      const dx = pointerTarget.x - explorer.x;
+      const dy = pointerTarget.y - explorer.y;
+      const d = Math.hypot(dx, dy);
+      if (d > 8) { vx = dx / d; vy = dy / d; }
+      else pointerTarget = null;
+    }
+
+    const currSpeed = activeStation === 2 ? 215 : explorer.speed;
+    const radius = activeStation === 2 ? 17 : 24;
+    explorer.x += vx * currSpeed * dt;
+    explorer.y += vy * currSpeed * dt;
+    if (vx !== 0 || vy !== 0) explorer.bob += dt * 12;
+
+    explorer.x = Math.max(55, Math.min(W - 55, explorer.x));
+    explorer.y = Math.max(135, Math.min(H - 42, explorer.y));
+
+    if (activeStation === 2) {
+      for (const w of s2Walls) {
+        const res = resolveCircleRect(explorer.x, explorer.y, radius, w);
+        explorer.x = res.x; explorer.y = res.y;
+      }
+    }
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(bgSceneCanvas, 0, 0, W, H);
+    ctx.fillStyle = 'rgba(20, 58, 42, 0.24)';
+    ctx.fillRect(0, 0, W, H);
+
+    if (activeStation === 1) drawAndUpdateStation1(dt);
+    else if (activeStation === 2) drawAndUpdateStation2();
+    else if (activeStation === 3) drawAndUpdateStation3();
+
+    const bobOffset = Math.sin(explorer.bob) * 3;
+    const expSize = activeStation === 2 ? 44 : 64;
+    ctx.drawImage(IMG_OBJ.explorer, explorer.x - expSize / 2, explorer.y - expSize / 2 + bobOffset, expSize, expSize);
+
+    if (activeStation === 3 && carriedCrate) {
+      ctx.drawImage(IMG_OBJ.crate, explorer.x - 20, explorer.y - 68 + bobOffset, 40, 40);
+      drawLabelPill(carriedCrate.clueText, explorer.x, explorer.y - 78 + bobOffset, '#fff3cd', '#582f0e');
+    }
+  }
+
+  function drawLabelPill(text, x, y, bg = 'rgba(255,255,255,0.92)', fg = '#1d3549') {
+    ctx.font = '800 13px system-ui, Arial, sans-serif';
+    const tw = ctx.measureText(text).width + 18;
+    ctx.fillStyle = bg;
+    ctx.beginPath();
+    ctx.roundRect(x - tw / 2, y - 12, tw, 24, 10);
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = fg;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, x, y);
+  }
+
+  function drawAndUpdateStation1(dt) {
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.ellipse(500, 365, 390, 195, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    const target = s1Targets[s1Step];
+    for (const a of s1Animals) {
+      a.x += a.vx * dt;
+      a.y += a.vy * dt;
+      if (a.x < 115 || a.x > W - 115) a.vx *= -1;
+      if (a.y < 185 || a.y > H - 75) a.vy *= -1;
+
+      ctx.fillStyle = 'rgba(0,0,0,0.22)';
+      ctx.beginPath();
+      ctx.ellipse(a.x, a.y + 30, 28, 9, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.drawImage(IMG_OBJ[a.id], a.x - 38, a.y - 38, 76, 76);
+
+      if (cooldown <= 0 && target && Math.hypot(explorer.x - a.x, explorer.y - a.y) < 52) {
+        cooldown = 0.9;
+        if (a.id === target.id) {
+          SoundEngine.correct();
+          score += 100; gems += 1; totalMatches += 1; s1Step += 1;
+          if (s1Step >= 4) {
+            updateHUD('Orchid Haven', '4/4', 'ORCHID HAVEN CLEARED!', 'All rainforest animals matched!');
+            completeCurrentStation(1, 'Station 1: Orchid Haven');
+          } else {
+            showToast(`Awesome! That is the ${target.word}! (+100 pts)`, true);
+            spawnS1Round();
+          }
+        } else {
+          SoundEngine.wrong();
+          showToast(`That is a ${a.word}! Keep looking for the ${target.word}.`, false);
+          explorer.y += 28;
+        }
+      }
+    }
+  }
+
+  function drawAndUpdateStation2() {
+    ctx.fillStyle = 'rgba(235, 228, 205, 0.86)';
+    ctx.beginPath();
+    ctx.roundRect(MX - 6, MY - 6, 15 * TILE + 12, 9 * TILE + 12, 14);
+    ctx.fill();
+
+    for (const w of s2Walls) {
+      ctx.fillStyle = '#6c757d';
+      ctx.fillRect(w.x, w.y, w.w, w.h);
+      ctx.fillStyle = '#8d99ae';
+      ctx.fillRect(w.x + 4, w.y + 4, w.w - 8, w.h - 8);
+      ctx.fillStyle = '#52b788';
+      ctx.fillRect(w.x + 4, w.y + 4, w.w - 14, 7);
+    }
+
+    for (const g of s2Gems) {
+      if (g.taken) continue;
+      ctx.drawImage(IMG_OBJ.gem, g.x - 15, g.y - 15, 30, 30);
+      if (Math.hypot(explorer.x - g.x, explorer.y - g.y) < 26) {
+        g.taken = true;
+        gems += 1; score += 25;
+        SoundEngine.gem();
+        updateHUD();
+        showToast('Collected a Maya Gem! (+25 pts)', true);
+      }
+    }
+
+    for (const a of s2Animals) {
+      ctx.drawImage(IMG_OBJ[a.id], a.x - 25, a.y - 25, 50, 50);
+      if (cooldown <= 0 && Math.hypot(explorer.x - a.x, explorer.y - a.y) < 32) {
+        cooldown = 0.9;
+        if (a.correct) {
+          SoundEngine.correct();
+          score += 100; totalMatches += 1; s2Stage += 1;
+          if (s2Stage >= mazeStages.length) {
+            updateHUD('Hidden Falls Maze', '3/3', 'MAYA RUINS CLEARED!', 'You rescued every temple animal!');
+            completeCurrentStation(2, 'Station 2: Hidden Falls Maze');
+          } else {
+            showToast(`Found the ${a.name}! Moving to next temple chamber...`, true);
+            spawnS2Stage();
+          }
+        } else {
+          SoundEngine.wrong();
+          showToast(`That is a ${a.name}! Explore another corridor.`, false);
+        }
+      }
+    }
+  }
+
+  function drawAndUpdateStation3() {
+    ctx.fillStyle = 'rgba(72, 202, 228, 0.55)';
+    ctx.strokeStyle = 'rgba(224, 251, 252, 0.85)';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.ellipse(500, 360, 210, 130, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    for (const a of s3Animals) {
+      ctx.fillStyle = a.matched ? 'rgba(46, 204, 113, 0.45)' : 'rgba(255, 255, 255, 0.35)';
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, 48, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.drawImage(IMG_OBJ[a.id], a.x - 40, a.y - 40, 80, 80);
+      drawLabelPill(a.label, a.x, a.y + 52, a.matched ? '#d8f3dc' : '#ffffff', '#1d3549');
+      if (a.matched) {
+        ctx.drawImage(IMG_OBJ.check, a.x + 22, a.y - 44, 26, 26);
+      }
+
+      if (!a.matched && carriedCrate && cooldown <= 0 && Math.hypot(explorer.x - a.x, explorer.y - a.y) < 58) {
+        cooldown = 0.8;
+        if (carriedCrate.id === a.id) {
+          SoundEngine.correct();
+          a.matched = true;
+          carriedCrate.delivered = true;
+          carriedCrate = null;
+          s3DoneCount += 1; score += 100; gems += 1; totalMatches += 1;
+          if (s3DoneCount >= 4) {
+            updateHUD("Eagle's Summit", '4/4', 'SUMMIT RESCUE COMPLETE!', 'All animals matched with their clues!');
+            completeCurrentStation(3, "Station 3: Eagle's Summit Rescue");
+          } else {
+            updateHUD(
+              "Eagle's Summit",
+              `${s3DoneCount}/4`,
+              'PICK UP NEXT CLUE CRATE',
+              `Great match for ${a.label}! Walk back to the centre for another crate.`
+            );
+            showToast(`Matched ${a.label}! (+100 pts)`, true);
+          }
+        } else {
+          SoundEngine.wrong();
+          showToast(`Not quite! "${carriedCrate.clueText}" belongs to a different animal.`, false);
+        }
+      }
+    }
+
+    for (const c of s3Crates) {
+      if (c.delivered || carriedCrate === c) continue;
+      ctx.drawImage(IMG_OBJ.crate, c.x - 24, c.y - 24, 48, 48);
+      drawLabelPill(c.clueText, c.x, c.y + 34, '#fff9eb', '#582f0e');
+
+      if (!carriedCrate && cooldown <= 0 && Math.hypot(explorer.x - c.x, explorer.y - c.y) < 42) {
+        cooldown = 0.4;
+        carriedCrate = c;
+        SoundEngine.pickup();
+        updateHUD(
+          "Eagle's Summit",
+          `${s3DoneCount}/4`,
+          `CLUE: "${c.clueText.toUpperCase()}"`,
+          'Walk to the animal that matches this clue!'
+        );
+        showToast(`Picked up: "${c.clueText}"`, true);
+      }
+    }
+  }
+
+  // Event Listeners
+  $('startBtn').onclick = () => {
+    playerName = $('playerName').value.trim() || 'Explorer';
+    playerClass = $('playerClass').value.trim() || 'Year 4';
+    SoundEngine.startBGM();
+    SoundEngine.click();
+    saveToSheets('English Treasure Quest (3 Stations)', 'Started');
+    openMapScreen();
+  };
+
+  $('btnStation1').onclick = startStation1;
+  $('btnStation2').onclick = startStation2;
+  $('btnStation3').onclick = startStation3;
+  $('backToMapBtn').onclick = () => { SoundEngine.click(); openMapScreen(); };
+
+  $('claimTreasureBtn').onclick = () => {
+    if (!(stationDone[1] && stationDone[2] && stationDone[3])) return;
+    SoundEngine.victory();
+    $('mapScreen').classList.add('hidden');
+    $('endScreen').classList.remove('hidden');
+    saveToSheets('English Treasure Quest (3 Stations)', 'Completed');
+    $('endGreeting').textContent = `Congratulations, ${playerName} from ${playerClass}! You completed the entire Wildlife Guardians Expedition!`;
+    $('endStats').innerHTML = `
+      <div class="stat-row"><img class="icon-sm" src="${IMG_URI.check}" alt=""> Expedition Stations Cleared: 3 / 3</div>
+      <div class="stat-row"><img class="icon-sm" src="${IMG_URI.gem}" alt=""> Total Gems Collected: ${gems}</div>
+      <div class="stat-row"><img class="icon-sm" src="${IMG_URI.star}" alt=""> Final Score: ${score}</div>
+      <div class="stat-row"><img class="icon-sm" src="${IMG_URI.medal}" alt=""> Rank: Year 4 Wildlife Guardian</div>
+    `;
+  };
+
+  $('backMapEndBtn').onclick = () => { SoundEngine.click(); openMapScreen(); };
+  $('playAgainBtn').onclick = () => {
+    SoundEngine.click();
+    score = 0; gems = 0; totalMatches = 0;
+    stationDone[1] = false; stationDone[2] = false; stationDone[3] = false;
+    $('endScreen').classList.add('hidden');
+    $('startScreen').classList.remove('hidden');
+  };
+
+  window.addEventListener('keydown', e => { keys[e.code] = true; });
+  window.addEventListener('keyup', e => { keys[e.code] = false; });
+
+  canvas.addEventListener('pointerdown', e => {
+    if (activeStation === 0) return;
+    const rect = canvas.getBoundingClientRect();
+    const sx = W / rect.width, sy = H / rect.height;
+    pointerTarget = {
+      x: (e.clientX - rect.left) * sx,
+      y: (e.clientY - rect.top) * sy
+    };
+  });
+
+  document.querySelectorAll('.dpad-btn').forEach(btn => {
+    const dir = btn.dataset.dir;
+    const setDir = val => e => { e.preventDefault(); dpadState[dir] = val; };
+    btn.addEventListener('pointerdown', setDir(true));
+    btn.addEventListener('pointerup', setDir(false));
+    btn.addEventListener('pointerleave', setDir(false));
+    btn.addEventListener('pointercancel', setDir(false));
+  });
+
+  requestAnimationFrame(gameLoop);
 })();
 </script>
 </body>
 </html>
+```
