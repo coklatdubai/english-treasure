@@ -1,6 +1,3 @@
-Copy everything inside the code block below, save it as **`english_treasure_quest.html`**, and open it in any web browser. It goes all the way to the closing `</html>` tag and has your Google Spreadsheet URL pre-configured.
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,11 +18,11 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:system-ui,
 #startPanel{width:min(550px,96vw)}
 #mapPanel{width:min(940px,97vw);padding:16px 20px}
 #endPanel,#logPanel{width:min(760px,96vw)}
-.hero-art{width:100%;height:156px;object-fit:cover;border-radius:16px;border:3px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.18);margin-bottom:10px}
-.logo{font-weight:950;font-size:clamp(1.7rem,4.4vw,2.5rem);line-height:1.02;color:var(--green);margin:4px 0 8px}
-.subtitle{font-weight:700;color:#466070;margin:0 auto 12px;max-width:540px;font-size:.94rem}
-input{width:100%;padding:11px 14px;border:2px solid #bfd6cb;border-radius:12px;margin:4px 0 10px;font:inherit;user-select:text}
-button{border:0;border-radius:13px;padding:10px 16px;background:var(--green);color:#fff;font-weight:800;font-size:.95rem;cursor:pointer;margin:3px;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:transform .12s ease,filter .12s ease}
+.hero-art{width:100%;height:148px;object-fit:cover;border-radius:16px;border:3px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.18);margin-bottom:8px}
+.logo{font-weight:950;font-size:clamp(1.65rem,4.2vw,2.4rem);line-height:1.02;color:var(--green);margin:4px 0 6px}
+.subtitle{font-weight:700;color:#466070;margin:0 auto 10px;max-width:540px;font-size:.92rem}
+input{width:100%;padding:10px 14px;border:2px solid #bfd6cb;border-radius:12px;margin:4px 0 8px;font:inherit;user-select:text}
+button{border:0;border-radius:13px;padding:10px 16px;background:var(--green);color:#fff;font-weight:800;font-size:.94rem;cursor:pointer;margin:3px;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:transform .12s ease,filter .12s ease}
 button:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.07)}
 button.secondary{background:#3d6b82}
 button.gold{background:#e8a825;color:#2d1f04;border:2px solid #fff}
@@ -33,6 +30,7 @@ button.SoundBtn{background:#265947;border:2px solid rgba(255,255,255,.8)}
 button.logBtn{background:#7a4b1e;border:2px solid rgba(255,255,255,.85)}
 button:disabled{opacity:.55;cursor:not-allowed}
 .icon-sm{width:20px;height:20px;object-fit:contain;flex-shrink:0}
+.sync-box{margin-top:8px;padding:8px 12px;border-radius:12px;background:#eef7f1;border:1.5px solid #c3dfd0;font-size:.81rem;font-weight:750;color:#23533d}
 .map-topbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px}
 .map-stats-pills{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
 .pill{background:#e3f3e8;color:#174932;font-weight:850;font-size:.84rem;padding:6px 11px;border-radius:999px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.08);display:inline-flex;align-items:center;gap:5px}
@@ -134,9 +132,15 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
       <label for="playerClass"><b>Class</b></label>
       <input id="playerClass" maxlength="24" placeholder="e.g. Year 4 Bestari">
     </div>
-    <button id="startBtn" style="width:100%;font-size:1.08rem;padding:13px;margin-top:4px" type="button">
+    <button id="startBtn" style="width:100%;font-size:1.06rem;padding:12px;margin-top:2px" type="button">
       <img id="startPlayIcon" class="icon-sm" alt=""> OPEN WILDLIFE EXPEDITION MAP
     </button>
+    <div style="margin-top:6px">
+      <button id="testSheetBtn" class="secondary" style="font-size:.82rem;padding:7px 13px" type="button">
+        Teacher: Test Google Sheet Sync
+      </button>
+      <div id="syncStatusBox" class="sync-box hidden"></div>
+    </div>
   </div>
 </div>
 
@@ -166,12 +170,10 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
         <rect width="960" height="540" fill="url(#oceanGrad)"/>
         <path d="M95,335 Q120,165 280,105 Q435,68 585,78 Q815,62 870,210 Q905,365 780,455 Q620,505 465,485 Q240,515 125,425 Z" fill="#64dfdf" opacity="0.48"/>
         <path d="M115,330 Q140,178 290,120 Q440,86 580,94 Q795,82 848,218 Q880,355 762,438 Q610,482 465,465 Q255,492 142,410 Z" fill="url(#islandGrass)" stroke="#3b5e2b" stroke-width="4"/>
-        <!-- Coral Coast Beach -->
         <path d="M235,418 Q355,375 495,412 Q575,438 595,468 Q455,495 315,472 Q230,455 235,418 Z" fill="#f6e4ad" stroke="#d4b475" stroke-width="3"/>
         <ellipse cx="435" cy="468" rx="120" ry="38" fill="#48cae4"/>
         <circle cx="380" cy="482" r="14" fill="#ff758f"/><circle cx="395" cy="488" r="10" fill="#ffb703"/>
         <circle cx="495" cy="478" r="13" fill="#c77dff"/><circle cx="510" cy="485" r="9" fill="#fb8500"/>
-        <!-- Snow-Capped Mountains & Sapphire Lake -->
         <polygon points="150,305 235,145 320,305" fill="#6c757d"/>
         <polygon points="235,145 202,206 222,200 238,215 255,198 270,208" fill="#ffffff"/>
         <polygon points="245,310 345,115 450,310" fill="#5c677d"/>
@@ -181,7 +183,6 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
         <ellipse cx="335" cy="265" rx="52" ry="20" fill="#4ea8de" stroke="#caf0f8" stroke-width="2.5"/>
         <text x="335" y="269" font-size="10" font-weight="900" fill="#03045e" text-anchor="middle">SAPPHIRE LAKE</text>
         <g fill="#1b4332"><polygon points="175,320 187,288 199,320"/><polygon points="205,332 217,300 229,332"/><polygon points="245,325 257,293 269,325"/><polygon points="395,295 407,265 419,295"/></g>
-        <!-- Rainforest Canopy & Serpent Run River -->
         <rect x="615" y="92" width="18" height="58" fill="#6f4528"/>
         <circle cx="624" cy="78" r="46" fill="#2d6a4f"/><circle cx="598" cy="86" r="32" fill="#40916c"/><circle cx="650" cy="86" r="32" fill="#52b788"/>
         <rect x="735" y="96" width="18" height="58" fill="#6f4528"/>
@@ -189,7 +190,6 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
         <path d="M805,145 Q825,145 830,225 L795,225 Z" fill="#90e0ef"/>
         <path d="M800,222 Q690,260 595,235 Q505,212 468,282 Q440,342 565,388 Q650,420 695,468" fill="none" stroke="#2ec4b6" stroke-width="22" stroke-linecap="round"/>
         <path d="M800,222 Q690,260 595,235 Q505,212 468,282 Q440,342 565,388 Q650,420 695,468" fill="none" stroke="#cbf3f0" stroke-width="5" stroke-dasharray="12 10" stroke-linecap="round"/>
-        <!-- Temple Ruins & Base Camp -->
         <g transform="translate(530,265)">
           <rect x="0" y="34" width="76" height="18" rx="3" fill="#9b967c" stroke="#5c5846" stroke-width="2"/>
           <rect x="11" y="18" width="54" height="18" rx="3" fill="#b5b095" stroke="#5c5846" stroke-width="2"/>
@@ -200,18 +200,15 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
         <rect x="536" y="358" width="36" height="12" rx="3" transform="rotate(-24 554 364)" fill="#bc6c25" stroke="#582f0e" stroke-width="2"/>
         <polygon points="482,208 500,182 518,208" fill="#e9c46a" stroke="#7f4f24" stroke-width="2"/>
         <text x="500" y="221" font-size="10" font-weight="900" fill="#fff9eb" text-anchor="middle">BASE CAMP</text>
-        <!-- Dotted Trails -->
         <path d="M500,208 Q605,195 705,180" fill="none" stroke="#fff3b0" stroke-width="4" stroke-dasharray="6 6" stroke-linecap="round"/>
         <path d="M705,180 Q735,265 695,325" fill="none" stroke="#fff3b0" stroke-width="4" stroke-dasharray="6 6" stroke-linecap="round"/>
         <path d="M500,208 Q445,165 395,148" fill="none" stroke="#fff3b0" stroke-width="4" stroke-dasharray="6 6" stroke-linecap="round"/>
         <path d="M695,325 Q570,415 445,450" fill="none" stroke="#ffd166" stroke-width="4" stroke-dasharray="6 6" stroke-linecap="round"/>
-        <!-- Region Labels -->
         <g font-family="Arial,sans-serif" font-weight="900" font-size="12" text-anchor="middle">
           <rect x="215" y="292" width="150" height="24" rx="6" fill="#264653" stroke="#fff" stroke-width="1.5"/><text x="290" y="308" fill="#ffffff">MOUNTAIN FORESTS</text>
           <rect x="755" y="72" width="122" height="24" rx="6" fill="#2d6a4f" stroke="#d8f3dc" stroke-width="1.5"/><text x="816" y="88" fill="#fff9eb">RAINFOREST</text>
           <rect x="242" y="476" width="120" height="24" rx="6" fill="#d4a373" stroke="#582f0e" stroke-width="1.5"/><text x="302" y="492" fill="#2d1f04">CORAL COAST</text>
         </g>
-        <!-- Parchment Scroll -->
         <g transform="translate(28,22)">
           <rect x="0" y="6" width="16" height="72" rx="7" fill="#bc8a5f" stroke="#582f0e" stroke-width="2.5"/>
           <rect x="12" y="12" width="220" height="60" fill="url(#scrollGrad)" stroke="#582f0e" stroke-width="2.5"/>
@@ -532,7 +529,7 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
   $('endBannerImg').src = IMG_URI.endBanner; $('endTrophyIcon').src = IMG_URI.trophy;
   $('endMapIcon').src = IMG_URI.mapIcon; $('endRestartIcon').src = IMG_URI.restart;
 
-  // 4. DIAGNOSTIC SCORING & MISTAKE LOGGING + GOOGLE SHEETS SYNC
+  // 4. DIAGNOSTIC SCORING & DUAL-FORMAT GOOGLE SHEETS SYNC
   let playerName = 'Explorer', playerClass = 'Year 4';
   let score = 0, gems = 0, totalMatches = 0, firstTryMatches = 0, wrongAttempts = 0;
   let currentPromptHadMistake = false;
@@ -550,15 +547,15 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
     return mistakeLog.map(m => `S${m.stationNum}:${m.expected}!=${m.picked}`).join(' | ');
   }
 
-  function saveToSheets(activity, baseStatus) {
+  function buildPayload(activity, baseStatus) {
     const completedCount = Number(stationDone[1]) + Number(stationDone[2]) + Number(stationDone[3]);
     const acc = getAccuracyPct() + '%';
     const summary = buildMistakeSummaryString();
     const richStatus = `${baseStatus} | Acc:${acc} | Err(S1:${stationMistakes[1]},S2:${stationMistakes[2]},S3:${stationMistakes[3]}) | ${summary}`;
-
-    const data = new URLSearchParams({
+    return {
       name: playerName,
       studentClass: playerClass,
+      class: playerClass,
       activity,
       score: String(score),
       correctAnswers: String(totalMatches),
@@ -571,10 +568,19 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
       s3Mistakes: String(stationMistakes[3]),
       mistakeDetails: summary,
       status: richStatus
-    });
+    };
+  }
 
-    return fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: data })
-      .catch(err => console.error('Could not submit game record:', err));
+  // Sends BOTH URL query parameters (e.parameter) AND JSON body (e.postData.contents)
+  function saveToSheets(activity, baseStatus) {
+    const payload = buildPayload(activity, baseStatus);
+    const qs = new URLSearchParams(payload).toString();
+    return fetch(`${GOOGLE_SCRIPT_URL}?${qs}`, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).catch(err => console.error('Could not submit game record:', err));
   }
 
   function recordMistake(stationNum, stationName, expectedWord, pickedWord, clue) {
@@ -754,9 +760,7 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
     updateHUD('Orchid Haven', `${s1Step}/${S1_TOTAL}`, `WALK TO: ${cur.word}`, cur.clue);
   }
 
-  // --- STATION 2: HIDDEN FALLS TEMPLE MAZE (100% ZERO DEAD ENDS + MULTI-ROUTE LOOPS) ---
-  // Every walkable '0' tile has >= 2 open neighbors (zero dead ends anywhere!)
-  // Row 3 and Row 7 are full-width clear bypass highways so decoys NEVER block any path!
+  // --- STATION 2: HIDDEN FALLS TEMPLE MAZE (100% ZERO DEAD ENDS) ---
   const MAZE_GRID = [
     "111111111111111",
     "100000000000001",
@@ -769,7 +773,6 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
     "111111111111111"
   ];
   const TILE = 52, MX = 105, MY = 122, S2_TOTAL = 4;
-  // 5 independent 2-entrance loop sanctuaries (none sit on the Row 3 or Row 7 highways)
   const MAZE_SANCTUARIES = [
     { c: 2,  r: 1, safeC: 1,  safeR: 3 },
     { c: 6,  r: 1, safeC: 7,  safeR: 3 },
@@ -815,7 +818,6 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
     initAudio(); activeStation = 2;
     $('mapScreen').classList.add('hidden'); $('hud').classList.remove('hidden');
     s2Stage = 0; currentPromptHadMistake = false;
-    // Always keep Dolphin in Round 1, followed by 3 varied DSKP animals
     const others = s2MasterPool.slice(1).sort(() => Math.random() - 0.5).slice(0, S2_TOTAL - 1);
     s2Queue = [s2MasterPool[0], ...others];
     s2Walls = [];
@@ -918,7 +920,6 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
       pointerTarget = null; s2AutoPath = [];
       const len = Math.hypot(vx, vy);
       vx /= len; vy /= len;
-      // Gentle corridor centering in Station 2 so corner turns never snag
       if (activeStation === 2) {
         const cc = posToCell(explorer.x, explorer.y);
         const center = cellCenter(cc.c, cc.r);
@@ -1012,7 +1013,6 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
     ctx.fillStyle = 'rgba(238,231,210,0.9)';
     ctx.beginPath(); ctx.roundRect(MX - 6, MY - 6, 15 * TILE + 12, 9 * TILE + 12, 14); ctx.fill();
 
-    // Draw golden hint stepping stones if pupil made an earlier mistake on this maze round
     if (s2HintPath.length > 0) {
       ctx.fillStyle = 'rgba(255,209,102,0.65)';
       for (const hp of s2HintPath) {
@@ -1038,7 +1038,6 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
 
     const st = s2Queue[s2Stage];
     for (const a of s2Animals) {
-      // Shimmering turquoise pool for Dolphin, Blue Whale & aquatic animals
       if (a.water) {
         ctx.fillStyle = 'rgba(72,202,228,0.65)';
         ctx.beginPath(); ctx.arc(a.x, a.y, 23, 0, Math.PI * 2); ctx.fill();
@@ -1124,7 +1123,20 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
     }
   }
 
-  // 8. UI BUTTONS & INPUT LISTENERS
+  // 8. UI BUTTONS & DIAGNOSTIC SYNC TESTER
+  $('testSheetBtn').onclick = () => {
+    playerName = $('playerName').value.trim() || 'Teacher Test';
+    playerClass = $('playerClass').value.trim() || 'Year 4';
+    const payload = buildPayload('Sheet Sync Test', 'Diagnostic Ping');
+    const diagUrl = `${GOOGLE_SCRIPT_URL}?${new URLSearchParams(payload).toString()}`;
+    saveToSheets('Sheet Sync Test', 'Diagnostic Ping');
+
+    const box = $('syncStatusBox');
+    box.classList.remove('hidden');
+    box.innerHTML = `Test ping sent! Check your Google Sheet. Still empty? <button id="openDiagTabBtn" type="button" style="padding:5px 10px;font-size:.78rem;margin-left:4px">Open Live Script Check</button>`;
+    $('openDiagTabBtn').onclick = () => window.open(diagUrl, '_blank');
+  };
+
   $('startBtn').onclick = () => {
     initAudio();
     playerName = $('playerName').value.trim() || 'Explorer';
@@ -1216,4 +1228,3 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
 </script>
 </body>
 </html>
-```
