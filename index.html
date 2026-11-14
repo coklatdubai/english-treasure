@@ -1,6 +1,6 @@
 # English Treasure Quest — Complete HTML Game Code
 
-Copy all of the HTML code below, paste it into Notepad or any code editor, save it as **`english_treasure_quest.html`**, and open it in your browser.
+Copy all of the HTML code below, paste it into Notepad (or any text/code editor), save the file as **`english_treasure_quest.html`**, and open it in any web browser to play.
 
 ```html
 <!DOCTYPE html>
@@ -598,7 +598,6 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
         <polygon points="225,255 305,108 385,255" fill="url(#snowPeak)" stroke="#4a5d6e" stroke-width="2"/>
         <polygon points="315,245 395,88 475,245" fill="url(#snowPeak)" stroke="#4a5d6e" stroke-width="2"/>
         <polygon points="265,275 335,155 405,275" fill="url(#snowPeak)" stroke="#4a5d6e" stroke-width="2"/>
-        <!-- Sapphire Lake -->
         <ellipse cx="328" cy="215" rx="48" ry="20" fill="#48cae4" stroke="#caf0f8" stroke-width="2.5"/>
         <text x="328" y="219" text-anchor="middle" font-size="10" font-weight="900" fill="#03045e">SAPPHIRE LAKE</text>
 
@@ -614,7 +613,6 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
               fill="none" stroke="#2ec4b6" stroke-width="22" stroke-linecap="round"/>
         <path d="M785,145 C775,205 760,225 715,230 C645,235 585,195 520,210 C465,222 455,275 485,315 C525,365 625,375 685,435"
               fill="none" stroke="#cbf3f0" stroke-width="5" stroke-dasharray="14 12" stroke-linecap="round"/>
-        <!-- Waterfall Cliff Right -->
         <rect x="768" y="122" width="32" height="68" rx="8" fill="#90e0ef"/>
         <ellipse cx="784" cy="192" rx="28" ry="10" fill="#ffffff" opacity="0.85"/>
 
@@ -648,7 +646,6 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
           <polygon points="25,20 39,8 53,20" fill="#e07a5f"/>
           <text x="52" y="52" text-anchor="middle" font-size="10" font-weight="900" fill="#3d2608">SHELL COVE PORT</text>
         </g>
-        <!-- Wooden Bridge -->
         <line x1="528" y1="348" x2="565" y2="322" stroke="#8d5524" stroke-width="9" stroke-linecap="round"/>
         <line x1="528" y1="348" x2="565" y2="322" stroke="#e6ccb2" stroke-width="5" stroke-dasharray="4 4"/>
 
@@ -793,7 +790,6 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
 
   function startAmbienceAndMusic() {
     if (!audioCtx || !soundEnabled) return;
-    // Soft filtered waterfall & rainforest breeze noise
     if (!waterfallNode) {
       const bufferSize = audioCtx.sampleRate * 2;
       const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
@@ -817,7 +813,6 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
       waterfallNode.start();
     }
 
-    // Gentle wooden marimba jungle melody + occasional rainforest bird chirps
     if (!bgmInterval) {
       const scale = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
       let step = 0;
@@ -1069,7 +1064,7 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
   let currentPromptMistakeMade = false;
   const stationDone = { 1: false, 2: false, 3: false };
   const stationErrors = { 1: 0, 2: 0, 3: 0 };
-  let mistakesLog = []; // { station, expected, picked, clue, time }
+  let mistakesLog = [];
 
   function getAccuracyPct() {
     const attempts = totalMatches + mistakesLog.length;
@@ -1116,7 +1111,6 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
     const completedCount = Number(stationDone[1]) + Number(stationDone[2]) + Number(stationDone[3]);
     const acc = getAccuracyPct() + '%';
     const summaryStr = formatMistakeSummaryString();
-    // Append diagnostic details directly into `status` so existing Apps Scripts capture everything automatically!
     const richStatus = `${eventLabel} | Acc:${acc} | S1_Err:${stationErrors[1]} S2_Err:${stationErrors[2]} S3_Err:${stationErrors[3]} | ${summaryStr}`;
 
     const data = new URLSearchParams({
@@ -1204,17 +1198,17 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
   const DSKP_ANIMALS = [
     { id: 'cheetah', word: 'CHEETAH', walkClue: 'Walk to the fastest land animal in the world with black spots!', shortClue: 'Fastest spotted land cat' },
     { id: 'giraffe', word: 'GIRAFFE', walkClue: 'Walk to the tallest animal in the world with a very long neck!', shortClue: 'Tallest animal; eats high leaves' },
-    { id: 'whale', word: 'BLUE WHALE', walkClue: 'Walk to the biggest and heaviest animal in the ocean!', shortClue: 'Biggest & heaviest sea mammal' },
+    { id: 'whale', word: 'BLUE WHALE', walkClue: 'Walk to the biggest and heaviest animal in the ocean!', shortClue: 'Biggest & heaviest sea mammal', aquatic: true },
     { id: 'elephant', word: 'ELEPHANT', walkClue: 'Walk to the largest land mammal with big ears and a long trunk!', shortClue: 'Heavy mammal with a long trunk' },
     { id: 'ostrich', word: 'OSTRICH', walkClue: 'Walk to the biggest bird with long legs that runs fast but cannot fly!', shortClue: 'Largest bird; runs fast, cannot fly' },
     { id: 'panda', word: 'PANDA', walkClue: 'Walk to the black-and-white bear that eats green bamboo!', shortClue: 'Black-and-white bamboo eater' },
     { id: 'tiger', word: 'MALAYAN TIGER', walkClue: 'Walk to the fierce jungle cat with orange fur and black stripes!', shortClue: 'Fierce striped rainforest cat' },
     { id: 'rhino', word: 'RHINO', walkClue: 'Walk to the heavy grey animal with a strong horn on its nose!', shortClue: 'Thick grey skin & nose horn' },
-    { id: 'hippo', word: 'HIPPO', walkClue: 'Walk to the heavy river mammal with a huge mouth and short legs!', shortClue: 'Heavy river animal; huge mouth' },
+    { id: 'hippo', word: 'HIPPO', walkClue: 'Walk to the heavy river mammal with a huge mouth and short legs!', shortClue: 'Heavy river animal; huge mouth', aquatic: true },
     { id: 'gorilla', word: 'GORILLA', walkClue: 'Walk to the strong, intelligent black ape that lives in the rainforest!', shortClue: 'Strong & intelligent rainforest ape' },
     { id: 'camel', word: 'CAMEL', walkClue: 'Walk to the desert animal that has humps on its back!', shortClue: 'Travels hot deserts with humps' },
-    { id: 'crocodile', word: 'CROCODILE', walkClue: 'Walk to the long scaly reptile with sharp teeth in the river!', shortClue: 'Scaly river reptile; sharp jaws' },
-    { id: 'dolphin', word: 'DOLPHIN', walkClue: 'Walk to the intelligent sea mammal that leaps out of the water!', shortClue: 'Intelligent sea jumper' },
+    { id: 'crocodile', word: 'CROCODILE', walkClue: 'Walk to the long scaly reptile with sharp teeth in the river!', shortClue: 'Scaly river reptile; sharp jaws', aquatic: true },
+    { id: 'dolphin', word: 'DOLPHIN', walkClue: 'Walk to the intelligent sea mammal that leaps out of the water!', shortClue: 'Intelligent sea jumper', aquatic: true },
     { id: 'tortoise', word: 'TORTOISE', walkClue: 'Walk to the slow four-legged reptile with a hard dome shell!', shortClue: 'Hard dome shell; walks slowly' },
     { id: 'polarbear', word: 'POLAR BEAR', walkClue: 'Walk to the huge white bear that lives on icy Arctic snow!', shortClue: 'Thick white fur for icy cold' },
     { id: 'squirrel', word: 'SQUIRREL', walkClue: 'Walk to the small, quick tree animal with a bushy tail that eats nuts!', shortClue: 'Small climber; bushy tail & nuts' },
@@ -1230,7 +1224,8 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
   const W = 1000, H = 620;
   let activeStation = 0;
   let keys = {}, dpadState = { up: false, down: false, left: false, right: false };
-  let pointerTarget = null, toastTimer = null, cooldown = 0;
+  let pointerTarget = null, s2Waypoints = [], s2HintPath = [];
+  let toastTimer = null, cooldown = 0;
 
   const explorer = { x: 500, y: 470, speed: 250, bob: 0 };
 
@@ -1249,7 +1244,7 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
     el.style.background = isGood ? 'rgba(25, 105, 65, 0.96)' : 'rgba(175, 48, 38, 0.96)';
     el.classList.remove('hidden');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => el.classList.add('hidden'), 2200);
+    toastTimer = setTimeout(() => el.classList.add('hidden'), 2300);
   }
 
   function updateHUD(label, progText, word, clue) {
@@ -1291,6 +1286,7 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
   function openMapScreen() {
     activeStation = 0;
     pointerTarget = null;
+    s2Waypoints = [];
     $('hud').classList.add('hidden');
     $('startScreen').classList.add('hidden');
     $('endScreen').classList.add('hidden');
@@ -1339,23 +1335,107 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
     updateHUD('Station 1: Orchid Haven', `${s1Step}/${S1_TOTAL}`, `FIND: ${target.word}`, target.walkClue);
   }
 
-  // --- STATION 2: HIDDEN FALLS MAZE (4 Rounds from DSKP Animals) ---
+  // --- STATION 2: HIDDEN FALLS MAZE (ZERO DEAD ENDS — 100% LOOP-CONNECTED BRAIDED MAZE) ---
+  // Every walkable '0' corridor tile has at least 2 open neighbours (ZERO dead ends!).
+  // Every animal sanctuary sits on a 2-door loop bridge while wide highways (rows 3 & 7, col 7)
+  // let the explorer reach EVERY animal from multiple directions without touching decoys!
   const MAZE_GRID = [
     "111111111111111",
     "100010000010001",
     "101010111010101",
-    "101000001000101",
-    "101111101110101",
-    "100000100000001",
-    "101110111011101",
-    "100010000010001",
+    "100000000000001",
+    "101110101011101",
+    "100000101000001",
+    "101011101110101",
+    "100000000000001",
     "111111111111111"
   ];
+  const MAZE_ROWS = MAZE_GRID.length, MAZE_COLS = MAZE_GRID[0].length;
   const TILE = 54, MX = 95, MY = 116, S2_TOTAL = 4;
+  const S2_START = { col: 7, row: 7 };
   let s2Stage = 0, s2Quests = [], s2Walls = [], s2Animals = [], s2Gems = [];
+
+  // 5 symmetric loop-bridge sanctuaries: every single one has 2 open entrances/exits (left & right)
+  // AND full highway bypasses on Row 3 and Row 7 so no animal is ever blocked or trapped!
+  const MAZE_SANCTUARIES = [
+    { col: 2, row: 1, safeCol: 2, safeRow: 3 },
+    { col: 7, row: 1, safeCol: 7, safeRow: 3 },
+    { col: 12, row: 1, safeCol: 12, safeRow: 3 },
+    { col: 2, row: 5, safeCol: 2, safeRow: 7 },
+    { col: 12, row: 5, safeCol: 12, safeRow: 7 }
+  ];
 
   function cellCenter(col, row) {
     return { x: MX + col * TILE + TILE / 2, y: MY + row * TILE + TILE / 2 };
+  }
+
+  function posToCell(px, py) {
+    let col = Math.floor((px - MX) / TILE);
+    let row = Math.floor((py - MY) / TILE);
+    col = Math.max(1, Math.min(MAZE_COLS - 2, col));
+    row = Math.max(1, Math.min(MAZE_ROWS - 2, row));
+    if (MAZE_GRID[row][col] === '0') return { col, row };
+
+    let best = { col: S2_START.col, row: S2_START.row }, bestDist = Infinity;
+    for (let r = 1; r < MAZE_ROWS - 1; r++) {
+      for (let c = 1; c < MAZE_COLS - 1; c++) {
+        if (MAZE_GRID[r][c] === '0') {
+          const ctr = cellCenter(c, r);
+          const d = Math.hypot(px - ctr.x, py - ctr.y);
+          if (d < bestDist) { bestDist = d; best = { col: c, row: r }; }
+        }
+      }
+    }
+    return best;
+  }
+
+  // Shortest-path solver that avoids decoy sanctuaries so clicking any target animal
+  // walks cleanly along open corridors straight to that animal!
+  function bfsMazePath(startCol, startRow, goalCol, goalRow, avoidSet = null) {
+    const runSearch = (blocked) => {
+      const queue = [{ col: startCol, row: startRow }];
+      const visited = new Set([`${startCol},${startRow}`]);
+      const parent = {};
+      const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+
+      while (queue.length > 0) {
+        const cur = queue.shift();
+        if (cur.col === goalCol && cur.row === goalRow) {
+          const path = [];
+          let k = `${goalCol},${goalRow}`;
+          while (k) {
+            const [c, r] = k.split(',').map(Number);
+            path.unshift(cellCenter(c, r));
+            k = parent[k];
+          }
+          if (path.length > 1) path.shift();
+          return path;
+        }
+        for (const [dc, dr] of dirs) {
+          const nc = cur.col + dc, nr = cur.row + dr;
+          const key = `${nc},${nr}`;
+          const isGoal = nc === goalCol && nr === goalRow;
+          if (
+            nr >= 0 && nr < MAZE_ROWS &&
+            nc >= 0 && nc < MAZE_COLS &&
+            MAZE_GRID[nr][nc] === '0' &&
+            !visited.has(key) &&
+            (isGoal || !blocked || !blocked.has(key))
+          ) {
+            visited.add(key);
+            parent[key] = `${cur.col},${cur.row}`;
+            queue.push({ col: nc, row: nr });
+          }
+        }
+      }
+      return [];
+    };
+
+    if (avoidSet && avoidSet.size > 0) {
+      const cleanPath = runSearch(avoidSet);
+      if (cleanPath.length > 0) return cleanPath;
+    }
+    return runSearch(null);
   }
 
   function startStation2() {
@@ -1364,10 +1444,15 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
     $('mapScreen').classList.add('hidden');
     $('hud').classList.remove('hidden');
     s2Stage = 0;
-    s2Quests = shuffle(DSKP_ANIMALS).slice(0, S2_TOTAL);
+
+    // Place Dolphin in Round 1 inside a shimmering lagoon sanctuary, followed by 3 varied Year 4 DSKP animals!
+    const dolphinAnimal = DSKP_ANIMALS.find(a => a.id === 'dolphin');
+    const restQuests = shuffle(DSKP_ANIMALS.filter(a => a.id !== 'dolphin')).slice(0, S2_TOTAL - 1);
+    s2Quests = [dolphinAnimal, ...restQuests];
+
     s2Walls = [];
-    for (let r = 0; r < MAZE_GRID.length; r++) {
-      for (let c = 0; c < MAZE_GRID[r].length; c++) {
+    for (let r = 0; r < MAZE_ROWS; r++) {
+      for (let c = 0; c < MAZE_COLS; c++) {
         if (MAZE_GRID[r][c] === '1') {
           s2Walls.push({ x: MX + c * TILE, y: MY + r * TILE, w: TILE, h: TILE });
         }
@@ -1378,23 +1463,30 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
 
   function spawnS2Stage() {
     currentPromptMistakeMade = false;
-    const startPos = cellCenter(1, 7);
-    explorer.x = startPos.x; explorer.y = startPos.y; pointerTarget = null;
+    const startPos = cellCenter(S2_START.col, S2_START.row);
+    explorer.x = startPos.x; explorer.y = startPos.y;
+    pointerTarget = null;
+    s2Waypoints = [];
+    s2HintPath = [];
 
     const target = s2Quests[s2Stage];
     const decoys = shuffle(DSKP_ANIMALS.filter(a => a.id !== target.id)).slice(0, 3);
-    const chambers = shuffle([cellCenter(13, 1), cellCenter(13, 7), cellCenter(7, 1), cellCenter(9, 5)]);
+    const chosenSpots = shuffle(MAZE_SANCTUARIES).slice(0, 4);
 
     s2Animals = [
-      { ...target, correct: true, x: chambers[0].x, y: chambers[0].y },
-      { ...decoys[0], correct: false, x: chambers[1].x, y: chambers[1].y },
-      { ...decoys[1], correct: false, x: chambers[2].x, y: chambers[2].y },
-      { ...decoys[2], correct: false, x: chambers[3].x, y: chambers[3].y }
+      { ...target, correct: true, ...chosenSpots[0], ...cellCenter(chosenSpots[0].col, chosenSpots[0].row) },
+      { ...decoys[0], correct: false, ...chosenSpots[1], ...cellCenter(chosenSpots[1].col, chosenSpots[1].row) },
+      { ...decoys[1], correct: false, ...chosenSpots[2], ...cellCenter(chosenSpots[2].col, chosenSpots[2].row) },
+      { ...decoys[2], correct: false, ...chosenSpots[3], ...cellCenter(chosenSpots[3].col, chosenSpots[3].row) }
     ];
 
-    s2Gems = [cellCenter(3, 1), cellCenter(7, 5), cellCenter(11, 3), cellCenter(5, 7)].map(p => ({
-      x: p.x, y: p.y, taken: false
-    }));
+    s2Gems = [
+      cellCenter(4, 3),
+      cellCenter(10, 3),
+      cellCenter(7, 5),
+      cellCenter(4, 7),
+      cellCenter(10, 7)
+    ].map(p => ({ x: p.x, y: p.y, taken: false }));
 
     updateHUD('Station 2: Hidden Falls Maze', `${s2Stage}/${S2_TOTAL}`, `MAZE TARGET: ${target.word}`, target.walkClue);
   }
@@ -1506,10 +1598,33 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
     if (keys.ArrowLeft || keys.KeyA || dpadState.left) vx -= 1;
     if (keys.ArrowRight || keys.KeyD || dpadState.right) vx += 1;
 
-    if (vx !== 0 || vy !== 0) {
+    const manualInput = (vx !== 0 || vy !== 0);
+
+    if (manualInput) {
       pointerTarget = null;
+      s2Waypoints = [];
       const len = Math.hypot(vx, vy);
       vx /= len; vy /= len;
+
+      // Gentle corner-centering assist in Station 2 so keyboard/D-pad turns never snag on stone edges
+      if (activeStation === 2 && (vx === 0 || vy === 0)) {
+        const curCell = posToCell(explorer.x, explorer.y);
+        const ctr = cellCenter(curCell.col, curCell.row);
+        if (vx !== 0 && Math.abs(ctr.y - explorer.y) > 2) {
+          explorer.y += Math.sign(ctr.y - explorer.y) * Math.min(Math.abs(ctr.y - explorer.y), 110 * dt);
+        } else if (vy !== 0 && Math.abs(ctr.x - explorer.x) > 2) {
+          explorer.x += Math.sign(ctr.x - explorer.x) * Math.min(Math.abs(ctr.x - explorer.x), 110 * dt);
+        }
+      }
+    } else if (activeStation === 2 && s2Waypoints.length > 0) {
+      const wp = s2Waypoints[0];
+      const dx = wp.x - explorer.x, dy = wp.y - explorer.y;
+      const d = Math.hypot(dx, dy);
+      if (d > 5) {
+        vx = dx / d; vy = dy / d;
+      } else {
+        s2Waypoints.shift();
+      }
     } else if (pointerTarget) {
       const dx = pointerTarget.x - explorer.x, dy = pointerTarget.y - explorer.y;
       const d = Math.hypot(dx, dy);
@@ -1517,8 +1632,8 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
       else pointerTarget = null;
     }
 
-    const currSpeed = activeStation === 2 ? 215 : explorer.speed;
-    const radius = activeStation === 2 ? 17 : 24;
+    const currSpeed = activeStation === 2 ? 230 : explorer.speed;
+    const radius = activeStation === 2 ? 14 : 24;
     explorer.x += vx * currSpeed * dt;
     explorer.y += vy * currSpeed * dt;
     if (vx !== 0 || vy !== 0) explorer.bob += dt * 12;
@@ -1539,11 +1654,11 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
     ctx.fillRect(0, 0, W, H);
 
     if (activeStation === 1) updateDrawS1(dt);
-    else if (activeStation === 2) updateDrawS2();
+    else if (activeStation === 2) updateDrawS2(now);
     else if (activeStation === 3) updateDrawS3();
 
     const bobOffset = Math.sin(explorer.bob) * 3;
-    const expSize = activeStation === 2 ? 44 : 62;
+    const expSize = activeStation === 2 ? 42 : 62;
     ctx.drawImage(IMG_OBJ.explorer, explorer.x - expSize / 2, explorer.y - expSize / 2 + bobOffset, expSize, expSize);
 
     if (activeStation === 3 && carriedCrate) {
@@ -1589,20 +1704,45 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
     }
   }
 
-  function updateDrawS2() {
-    ctx.fillStyle = 'rgba(235, 228, 205, 0.88)';
-    ctx.beginPath(); ctx.roundRect(MX - 6, MY - 6, 15 * TILE + 12, 9 * TILE + 12, 14); ctx.fill();
+  function updateDrawS2(now) {
+    // Temple floor slab
+    ctx.fillStyle = 'rgba(235, 228, 205, 0.92)';
+    ctx.beginPath(); ctx.roundRect(MX - 6, MY - 6, MAZE_COLS * TILE + 12, MAZE_ROWS * TILE + 12, 14); ctx.fill();
 
+    // Subtle stone corridor grid lines so open doors & loop bridges are crystal clear
+    ctx.strokeStyle = 'rgba(180, 172, 148, 0.35)';
+    ctx.lineWidth = 1;
+    for (let r = 1; r < MAZE_ROWS - 1; r++) {
+      for (let c = 1; c < MAZE_COLS - 1; c++) {
+        if (MAZE_GRID[r][c] === '0') {
+          ctx.strokeRect(MX + c * TILE, MY + r * TILE, TILE, TILE);
+        }
+      }
+    }
+
+    // Glowing golden stepping stones when guiding after a mistake
+    if (s2HintPath.length > 0) {
+      const pulse = 0.55 + 0.35 * Math.sin(now * 0.006);
+      ctx.fillStyle = `rgba(244, 185, 66, ${pulse})`;
+      for (const pt of s2HintPath) {
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, 7.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Mossy stone walls
     for (const w of s2Walls) {
       ctx.fillStyle = '#6c757d'; ctx.fillRect(w.x, w.y, w.w, w.h);
       ctx.fillStyle = '#8d99ae'; ctx.fillRect(w.x + 4, w.y + 4, w.w - 8, w.h - 8);
       ctx.fillStyle = '#52b788'; ctx.fillRect(w.x + 4, w.y + 4, w.w - 14, 7);
     }
 
+    // Collectible corridor gems
     for (const g of s2Gems) {
       if (g.taken) continue;
       ctx.drawImage(IMG_OBJ.gem, g.x - 14, g.y - 14, 28, 28);
-      if (Math.hypot(explorer.x - g.x, explorer.y - g.y) < 25) {
+      if (Math.hypot(explorer.x - g.x, explorer.y - g.y) < 24) {
         g.taken = true;
         gems += 1; score += 25;
         playSfx('gem');
@@ -1611,10 +1751,27 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
       }
     }
 
+    // 4 Open Loop-Bridge Sanctuaries (with shimmering turquoise water pools for Dolphin & aquatic animals)
     const target = s2Quests[s2Stage];
     for (const a of s2Animals) {
-      ctx.drawImage(IMG_OBJ[a.id], a.x - 24, a.y - 24, 48, 48);
-      if (cooldown <= 0 && target && Math.hypot(explorer.x - a.x, explorer.y - a.y) < 30) {
+      if (a.aquatic) {
+        ctx.fillStyle = 'rgba(72, 202, 228, 0.7)';
+        ctx.strokeStyle = '#caf0f8';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.roundRect(a.x - 23, a.y - 23, 46, 46, 12);
+        ctx.fill();
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = 'rgba(183, 228, 199, 0.62)';
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, 22, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.drawImage(IMG_OBJ[a.id], a.x - 23, a.y - 23, 46, 46);
+
+      if (cooldown <= 0 && target && Math.hypot(explorer.x - a.x, explorer.y - a.y) < 28) {
         cooldown = 0.95;
         if (a.correct) {
           const pts = recordCorrectMatch();
@@ -1628,9 +1785,18 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
           }
         } else {
           recordMistake(2, target.word, a.word, target.walkClue);
-          showToast(`Wrong chamber (-15 pts)! That is ${a.word}, not ${target.word}.`, false);
-          const startPos = cellCenter(1, 7);
-          explorer.x = startPos.x; explorer.y = startPos.y; pointerTarget = null;
+          showToast(`Wrong animal (-15 pts)! That is ${a.word}. Follow the golden stones to ${target.word}!`, false);
+          const safeSpot = cellCenter(a.safeCol, a.safeRow);
+          explorer.x = safeSpot.x;
+          explorer.y = safeSpot.y;
+          s2Waypoints = [];
+          pointerTarget = null;
+
+          const correctChamber = s2Animals.find(item => item.correct);
+          if (correctChamber) {
+            const decoyKeySet = new Set(s2Animals.filter(x => !x.correct).map(x => `${x.col},${x.row}`));
+            s2HintPath = bfsMazePath(a.safeCol, a.safeRow, correctChamber.col, correctChamber.row, decoyKeySet);
+          }
         }
       }
     }
@@ -1750,10 +1916,22 @@ table.mistake-table tr:nth-child(even) td { background: #faf8f1; }
     if (activeStation === 0) return;
     initAudio();
     const rect = canvas.getBoundingClientRect();
-    pointerTarget = {
-      x: (e.clientX - rect.left) * (W / rect.width),
-      y: (e.clientY - rect.top) * (H / rect.height)
-    };
+    const clickX = (e.clientX - rect.left) * (W / rect.width);
+    const clickY = (e.clientY - rect.top) * (H / rect.height);
+
+    if (activeStation === 2) {
+      const startCell = posToCell(explorer.x, explorer.y);
+      const goalCell = posToCell(clickX, clickY);
+      const decoyKeySet = new Set(
+        s2Animals
+          .filter(a => !a.correct && !(a.col === goalCell.col && a.row === goalCell.row))
+          .map(a => `${a.col},${a.row}`)
+      );
+      s2Waypoints = bfsMazePath(startCell.col, startCell.row, goalCell.col, goalCell.row, decoyKeySet);
+      pointerTarget = null;
+    } else {
+      pointerTarget = { x: clickX, y: clickY };
+    }
   });
 
   document.querySelectorAll('.dpad-btn').forEach(btn => {
