@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -106,7 +105,6 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
     <div id="promptClue">Use Arrow Keys, WASD, D-Pad, or tap anywhere to move your explorer!</div>
   </div>
   <div id="toastMsg" class="hidden">Great job!</div>
-
   <div id="dpad">
     <div></div>
     <button class="dpad-btn" data-dir="up" aria-label="Up"><img id="arrUp" alt=""></button>
@@ -153,7 +151,6 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
         <button id="mapSoundBtn" class="SoundBtn" type="button">Sound: ON</button>
       </div>
     </div>
-
     <div class="island-map-frame">
       <svg class="island-map-svg" viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -212,28 +209,23 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
         </g>
         <rect x="6" y="6" width="948" height="528" rx="12" fill="none" stroke="#386641" stroke-width="5"/>
       </svg>
-
       <button class="map-node" id="btnStation1" style="left:73%;top:34%" type="button">
         <div class="orb-ring orb-green">1<img id="chk1" class="done-check hidden" alt=""></div>
         <div class="node-banner">ORCHID HAVEN<span class="node-sub">Walk &amp; Match (5 Animals)</span></div>
       </button>
-
       <button class="map-node" id="btnStation2" style="left:72%;top:62%" type="button">
         <div class="orb-ring orb-gold">2<img id="chk2" class="done-check hidden" alt=""></div>
         <div class="node-banner">HIDDEN FALLS MAZE<span class="node-sub">Temple Maze (4 Animals)</span></div>
       </button>
-
       <button class="map-node" id="btnStation3" style="left:41%;top:26%" type="button">
         <div class="orb-ring orb-blue">3<img id="chk3" class="done-check hidden" alt=""></div>
         <div class="node-banner">EAGLE'S SUMMIT<span class="node-sub">Clue Crate Rescue (5 Animals)</span></div>
       </button>
-
       <button class="map-node" id="claimTreasureBtn" style="left:46%;top:83%" type="button" disabled>
         <div class="orb-ring orb-coral">4</div>
         <div class="node-banner" id="coralBannerText">CORAL TREASURE (0/3 Stations)</div>
       </button>
     </div>
-
     <div style="font-size:.84rem;font-weight:750;color:#3d5a6c">
       Click glowing stations <b>1</b>, <b>2</b>, and <b>3</b> in any order. Clear all 3 to unlock <b>4 — Coral Treasure</b>!
     </div>
@@ -298,7 +290,7 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
 <script>
 (() => {
   'use strict';
-  const $ = id => document.getElementById(id);
+  const \$ = id => document.getElementById(id);
 
   // IMPORTANT: Paste your Web App URL ending in "/exec" below (NOT "/macros/library/...")
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXh3lVBxo2rPZWMwZW-i2p_uLlYn3iS_V0whZZxb2T5BQ6cIHw1EPzWSw4cHcohPt9yw/exec";
@@ -426,7 +418,6 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
     sky.addColorStop(0, '#c7f9cc'); sky.addColorStop(0.35, '#74c69d');
     sky.addColorStop(0.72, '#2d6a4f'); sky.addColorStop(1, '#1b4332');
     ctx.fillStyle = sky; ctx.fillRect(0, 0, 1280, 720);
-
     for (let i = 0; i < 5; i++) {
       const g = ctx.createLinearGradient(180 + i * 190, 0, 420 + i * 200, 650);
       g.addColorStop(0, 'rgba(255,250,205,0.3)'); g.addColorStop(1, 'rgba(255,250,205,0)');
@@ -439,26 +430,20 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
     ctx.moveTo(0, 410); ctx.quadraticCurveTo(240, 220, 500, 350);
     ctx.quadraticCurveTo(780, 180, 1040, 340); ctx.lineTo(1280, 350);
     ctx.lineTo(1280, 720); ctx.lineTo(0, 720); ctx.fill();
-
     ctx.fillStyle = '#8d99ae'; ctx.fillRect(195, 210, 175, 155);
     ctx.fillStyle = '#6c757d'; ctx.fillRect(180, 192, 205, 22);
     ctx.fillStyle = '#1b4332'; ctx.beginPath(); ctx.arc(282, 365, 44, Math.PI, 0); ctx.fill();
-
     const wf = ctx.createLinearGradient(960, 210, 960, 520);
     wf.addColorStop(0, '#e0fbfc'); wf.addColorStop(0.5, '#72efdd'); wf.addColorStop(1, '#00b4d8');
     ctx.fillStyle = wf; ctx.beginPath();
     ctx.moveTo(920, 220); ctx.quadraticCurveTo(980, 215, 1025, 225);
     ctx.lineTo(1065, 520); ctx.lineTo(895, 520); ctx.closePath(); ctx.fill();
-
     ctx.fillStyle = '#48cae4'; ctx.beginPath(); ctx.ellipse(960, 540, 205, 45, 0, 0, Math.PI * 2); ctx.fill();
-
     const floorGrad = ctx.createLinearGradient(0, 360, 0, 720);
     floorGrad.addColorStop(0, 'rgba(64,145,108,0.88)'); floorGrad.addColorStop(1, 'rgba(40,96,70,0.95)');
     ctx.fillStyle = floorGrad; ctx.fillRect(0, 365, 1280, 355);
-
     ctx.fillStyle = 'rgba(221,184,146,0.52)';
     ctx.beginPath(); ctx.ellipse(640, 540, 440, 145, 0, 0, Math.PI * 2); ctx.fill();
-
     ctx.fillStyle = '#4a2c11'; ctx.fillRect(0, 0, 48, 720); ctx.fillRect(1232, 0, 48, 720);
     const greens = ['#1b4332', '#2d6a4f', '#40916c', '#52b788'];
     for (let i = 0; i < 18; i++) {
@@ -520,13 +505,13 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
   $('startBannerImg').src = IMG_URI.startBanner;
   $('startPlayIcon').src = IMG_URI.play;
   $('mapStarIcon').src = IMG_URI.star;
-  $('chk1').src = IMG_URI.check; $('chk2').src = IMG_URI.check; $('chk3').src = IMG_URI.check;
-  $('hudMapIcon').src = IMG_URI.mapIcon; $('hudCompassIcon').src = IMG_URI.compass;
-  $('hudGemIcon').src = IMG_URI.gem; $('hudStarIcon').src = IMG_URI.star;
-  $('arrUp').src = IMG_URI.arrUp; $('arrDown').src = IMG_URI.arrDown;
-  $('arrLeft').src = IMG_URI.arrLeft; $('arrRight').src = IMG_URI.arrRight;
-  $('endBannerImg').src = IMG_URI.endBanner; $('endTrophyIcon').src = IMG_URI.trophy;
-  $('endMapIcon').src = IMG_URI.mapIcon; $('endRestartIcon').src = IMG_URI.restart;
+  \$('chk1').src = IMG_URI.check; \$('chk2').src = IMG_URI.check; $('chk3').src = IMG_URI.check;
+  \$('hudMapIcon').src = IMG_URI.mapIcon; \$('hudCompassIcon').src = IMG_URI.compass;
+  \$('hudGemIcon').src = IMG_URI.gem; \$('hudStarIcon').src = IMG_URI.star;
+  \$('arrUp').src = IMG_URI.arrUp; \$('arrDown').src = IMG_URI.arrDown;
+  \$('arrLeft').src = IMG_URI.arrLeft; \$('arrRight').src = IMG_URI.arrRight;
+  \$('endBannerImg').src = IMG_URI.endBanner; \$('endTrophyIcon').src = IMG_URI.trophy;
+  \$('endMapIcon').src = IMG_URI.mapIcon; \$('endRestartIcon').src = IMG_URI.restart;
 
   // 4. DIAGNOSTIC SCORING & DUAL-FORMAT GOOGLE SHEETS SYNC
   let playerName = 'Explorer', playerClass = 'Year 4';
@@ -611,7 +596,7 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
     }
     tbody.innerHTML = mistakeLog.map(m => `
       <tr>
-        <td><b>S${m.stationNum}</b> (${m.station})</td>
+        <td><b>S\${m.stationNum}</b> (\${m.station})</td>
         <td class="tag-right">${m.expected}</td>
         <td class="tag-wrong">${m.picked}</td>
         <td>${m.clue}</td>
@@ -737,7 +722,7 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
 
   function startStation1() {
     initAudio(); activeStation = 1;
-    $('mapScreen').classList.add('hidden'); $('hud').classList.remove('hidden');
+    \$('mapScreen').classList.add('hidden'); \$('hud').classList.remove('hidden');
     s1Step = 0; currentPromptHadMistake = false;
     s1Targets = [...s1MasterPool].sort(() => Math.random() - 0.5).slice(0, S1_TOTAL);
     explorer.x = 500; explorer.y = 530; pointerTarget = null;
@@ -815,7 +800,7 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
 
   function startStation2() {
     initAudio(); activeStation = 2;
-    $('mapScreen').classList.add('hidden'); $('hud').classList.remove('hidden');
+    \$('mapScreen').classList.add('hidden'); \$('hud').classList.remove('hidden');
     s2Stage = 0; currentPromptHadMistake = false;
     const others = s2MasterPool.slice(1).sort(() => Math.random() - 0.5).slice(0, S2_TOTAL - 1);
     s2Queue = [s2MasterPool[0], ...others];
@@ -833,7 +818,6 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
     explorer.x = startPos.x; explorer.y = startPos.y;
     pointerTarget = null; s2AutoPath = []; s2HintPath = [];
     currentPromptHadMistake = false;
-
     const pickedSanctuaries = [...MAZE_SANCTUARIES].sort(() => Math.random() - 0.5).slice(0, 3);
     const st = s2Queue[s2Stage];
     const items = [
@@ -846,7 +830,6 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
       const pt = cellCenter(sc.c, sc.r);
       return { ...it, x: pt.x, y: pt.y, c: sc.c, r: sc.r, safeC: sc.safeC, safeR: sc.safeR };
     });
-
     s2Gems = [cellCenter(1, 3), cellCenter(7, 3), cellCenter(13, 3), cellCenter(7, 5)].map(p => ({ x: p.x, y: p.y, taken: false }));
     updateHUD('Hidden Falls Maze', `${s2Stage}/${S2_TOTAL}`, `MAZE QUEST: ${st.word}`, st.clue);
   }
@@ -857,10 +840,9 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
 
   function startStation3() {
     initAudio(); activeStation = 3;
-    $('mapScreen').classList.add('hidden'); $('hud').classList.remove('hidden');
+    \$('mapScreen').classList.add('hidden'); \$('hud').classList.remove('hidden');
     explorer.x = 500; explorer.y = 365; pointerTarget = null;
     carriedCrate = null; s3DoneCount = 0; currentPromptHadMistake = false;
-
     const chosen = [...s3MasterPool].sort(() => Math.random() - 0.5).slice(0, S3_TOTAL);
     const animalSpots = [
       { x: 155, y: 225 }, { x: 845, y: 225 },
@@ -868,13 +850,11 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
       { x: 500, y: 190 }
     ];
     s3Animals = chosen.map((a, i) => ({ ...a, x: animalSpots[i].x, y: animalSpots[i].y, matched: false }));
-
     const crateSpots = [
       { x: 390, y: 310 }, { x: 610, y: 310 },
       { x: 380, y: 455 }, { x: 620, y: 455 },
       { x: 500, y: 515 }
     ].sort(() => Math.random() - 0.5);
-
     s3Crates = chosen.map((a, i) => ({ id: a.id, expectedLabel: a.label, clueText: a.clueText, x: crateSpots[i].x, y: crateSpots[i].y, delivered: false }));
     updateHUD("Eagle's Summit", `0/${S3_TOTAL}`, 'PICK UP A CLUE CRATE', 'Walk onto any wooden crate, then carry it to the matching animal!');
   }
@@ -963,7 +943,6 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
     const bobOffset = Math.sin(explorer.bob) * 3;
     const expSize = activeStation === 2 ? 42 : 62;
     ctx.drawImage(IMG_OBJ.explorer, explorer.x - expSize / 2, explorer.y - expSize / 2 + bobOffset, expSize, expSize);
-
     if (activeStation === 3 && carriedCrate) {
       ctx.drawImage(IMG_OBJ.crate, explorer.x - 19, explorer.y - 66 + bobOffset, 38, 38);
       drawLabelPill(carriedCrate.clueText, explorer.x, explorer.y - 78 + bobOffset, '#fff3cd', '#582f0e');
@@ -1137,9 +1116,10 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
   $('backToMapBtn').onclick = openMapScreen;
   $('hudSoundBtn').onclick = toggleSound;
   $('mapSoundBtn').onclick = toggleSound;
+
   $('openLogMapBtn').onclick = openDiagnosticModal;
   $('hudLogBtn').onclick = openDiagnosticModal;
-  $('closeLogBtn').onclick = () => $('logModal').classList.add('hidden');
+  \$('closeLogBtn').onclick = () => \$('logModal').classList.add('hidden');
 
   $('copyReportBtn').onclick = () => {
     const lines = [
@@ -1159,12 +1139,11 @@ table.log-table tr:nth-child(even) td{background:#f8fcf9}
     $('mapScreen').classList.add('hidden');
     $('endScreen').classList.remove('hidden');
     saveToSheets(GAME_TITLE, 'Completed All 3 Stations');
-
     $('endGreeting').textContent = `Congratulations, ${playerName} (${playerClass})!`;
     $('endSummaryCards').innerHTML = `
       <div class="diag-box"><div class="diag-val">${score}</div><div class="diag-lbl">Final Score</div></div>
       <div class="diag-box"><div class="diag-val">${getAccuracyPct()}%</div><div class="diag-lbl">Overall Accuracy</div></div>
-      <div class="diag-box"><div class="diag-val">${firstTryMatches}/${totalMatches}</div><div class="diag-lbl">First-Try Matches</div></div>
+      <div class="diag-box"><div class="diag-val">\${firstTryMatches}/\${totalMatches}</div><div class="diag-lbl">First-Try Matches</div></div>
       <div class="diag-box"><div class="diag-val" style="color:#b83227">${wrongAttempts}</div><div class="diag-lbl">Mistakes Detected</div></div>
     `;
     renderMistakeRows('endMistakeBody');
